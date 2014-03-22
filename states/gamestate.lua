@@ -62,7 +62,7 @@ end
 
 function GameState:isVillageNearby(pos, threshold)
     for k, v in pairs(self.world) do
-        if v:isInstanceOf(Village) then
+        if v:isInstanceOf(Village) or v:isInstanceOf(Airport)then
             local diff = v.position - pos
             if diff:len() < threshold then
                 return true
@@ -73,6 +73,7 @@ function GameState:isVillageNearby(pos, threshold)
 end
 
 function GameState:generateVillages(left, right, top, bottom)
+    --villages
     local density = 1.5/(800*600)
     local area = math.abs((right - left)* (bottom - top))
     local count = area * density
@@ -89,6 +90,23 @@ function GameState:generateVillages(left, right, top, bottom)
             end 
         end    
     end
+    --airports
+
+   local density = 0.15/(800*600)
+    local area = math.abs((right - left)* (bottom - top))
+    local count = area * density
+    
+    for k = 1, count do
+        for l = 1, 50 do
+            local pos = Vector:new(math.random(left,right), math.random(top, bottom))
+            if not self:isVillageNearby(pos, 500) or l == 50 then
+                local airport = Airport:new(pos.x, pos.y, math.random()*2*math.pi)
+                self:add(airport)
+                break    
+            end 
+        end    
+    end
+     
 end
 
 function GameState:keypressed(key)

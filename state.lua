@@ -17,8 +17,8 @@ function State:add(entity, ui)
 end
 
 function State:delete(entity)
-    table.remove(self.world, entity)
-    table.remove(self.ui, entity)
+    table.removeValue(self.world, entity)
+    table.removeValue(self.ui, entity)
     entity.state = nil
 end 
 

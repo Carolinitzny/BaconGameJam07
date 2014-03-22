@@ -15,10 +15,11 @@ require "state"
 require "states/gamestate"
 require "states/menustate"
 
-function table.remove(table, value)
-    for k,v in pairs(table) do
+function table.removeValue(t, value)
+    for k,v in pairs(t) do
         if v == value then
-            table[k] = nil
+            table.remove(t, k)
+            return
         end
     end
 end
