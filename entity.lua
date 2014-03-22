@@ -34,7 +34,7 @@ function Plane:update(dt)
 end
 
 function Plane:draw()
-    love.graphics.draw(image.plane, self.position.x , self.position.y , self.direction, 1 ,1, (image.plane:getWidth())/2, image.plane:getHeight()/2)
+    love.graphics.draw(images.plane, self.position.x , self.position.y , self.direction, 1 ,1, (images.plane:getWidth())/2, images.plane:getHeight()/2)
 end
 
 function Plane:dropPackage()
@@ -57,7 +57,7 @@ end
 function Package:draw()
     local s = 0.2 + 0.2*self.altitude
     love.graphics.setColor(255,255,255)
-    love.graphics.draw(image.package, self.position.x , self.position.y , 0, s ,s, (image.package:getWidth())/2, image.package:getHeight()/2)
+    love.graphics.draw(images.package, self.position.x , self.position.y , 0, s ,s, (images.package:getWidth())/2, images.package:getHeight()/2)
     
 end
 
