@@ -7,6 +7,7 @@ function Plane:initialize(x, y)
     self.position = Vector:new(x,y)
     self.speed = 140
     self.direction = 0
+    self.directionChange = 0
     self.rotationspeed = 0.9
     self.fuel = 1
     self.fuelconsumption = 0.025
@@ -27,14 +28,15 @@ end
 
 function Plane:update(dt)
     if not self.isChrashing then
-        if love.keyboard.isDown("left") then
-            self.direction = self.direction - self.rotationspeed*dt
-            self.spinAngleSpeed = -self.rotationspeed
-        end
-        if love.keyboard.isDown("right") then
-            self.direction = self.direction + self.rotationspeed*dt
-            self.spinAngleSpeed = self.rotationspeed
-        end  
+        local dir = 0
+        local dirChangeSpeed = 5
+        if love.keyboard.isDown("left") or love.keyboard.isDown("a") then dir = -1 end
+        if love.keyboard.isDown("right") or love.keyboard.isDown("d") then dir = 1 end  
+        if not dir then dirChangeSpeed = 20 end
+        self.directionChange = self.directionChange * (1 - dt*dirChangeSpeed) + dir * dt * dirChangeSpeed
+
+        self.direction = self.direction + self.rotationspeed*dt*self.directionChange
+        self.spinAngleSpeed = self.directionChange
     else
         self.spinAngle = self.spinAngle + self.spinAngleSpeed * dt
     end
@@ -76,7 +78,6 @@ function Plane:crash()
     self.isChrashing = true
 
     tween(3, self, {altitude = 0}, "inQuad")
-    tween(3, self, {rotationspeed = 10}, "inCirc")
     tween(3, self, {speed = 0}, "inCirc", function() 
         self.state:add(Explosion:new(self.position:clone()))
     end)
