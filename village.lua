@@ -4,7 +4,7 @@ require "entity"
 Village = class ("Village", Entity)
 function Village:initialize(x,y)
     self.position = Vector:new(x,y) 
-    self.count = math.random(10)
+    self.count = math.random(3,10)
     self.houses = {}
     for k = 1, self.count do
         local house = {}
