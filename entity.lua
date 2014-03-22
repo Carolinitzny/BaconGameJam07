@@ -27,12 +27,16 @@ function Plane:initialize(x, y)
 end 
 
 function Plane:update(dt)
-    if love.keyboard.isDown("left") then
+    if self.isChrashing == false then
+        if love.keyboard.isDown("left") then
+            self.direction = self.direction - self.rotationspeed*dt
+        end
+        if love.keyboard.isDown("right") then
+            self.direction = self.direction + self.rotationspeed*dt
+        end  
+    else
         self.direction = self.direction - self.rotationspeed*dt
     end
-    if love.keyboard.isDown("right") then
-        self.direction = self.direction + self.rotationspeed*dt
-    end    
     local dir = Vector:new(0, -1)
     dir:rotate(self.direction)
     dir = dir*dt*self.speed
@@ -51,7 +55,6 @@ end
 function Plane:draw()
     love.graphics.draw(images.plane, self.position.x , self.position.y , self.direction, self.size, self.size, (images.plane:getWidth())/2,
         images.plane:getHeight()/2)
-    
 end
 
 function Plane:dropPackage()
@@ -64,6 +67,8 @@ end
 
 function Plane:crash()
     tween(5, self, {size = 0.2}, "inQuad")
+    tween(5, self, {rotationspeed = 10}, "inCirc")
+    tween(5, self, {speed = 400}, "inCirc")
 end
 
 Package = class ("Package", Entity)
