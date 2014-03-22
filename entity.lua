@@ -27,12 +27,16 @@ function Plane:initialize(x, y)
 end 
 
 function Plane:update(dt)
-    if love.keyboard.isDown("left") then
+    if self.isChrashing == false then
+        if love.keyboard.isDown("left") then
+            self.direction = self.direction - self.rotationspeed*dt
+        end
+        if love.keyboard.isDown("right") then
+            self.direction = self.direction + self.rotationspeed*dt
+        end  
+    else
         self.direction = self.direction - self.rotationspeed*dt
     end
-    if love.keyboard.isDown("right") then
-        self.direction = self.direction + self.rotationspeed*dt
-    end    
     local dir = Vector:new(0, -1)
     dir:rotate(self.direction)
     dir = dir*dt*self.speed
@@ -53,7 +57,8 @@ function Plane:draw()
         images.plane:getHeight()/2)
     love.graphics.print(tostring(self.size))
     love.graphics.draw(images.gauge, love.graphics.getWidth()-75, 10, 0, 0.05, 0.05, images.gauge:getWidth()/2, images.gauge:getHeight()/2)
-    love.graphics.draw(images.needle, love.graphics.getWidth()-75, 10, self.fuelrot, 0.05, 0.05, images.needle:       getWidth()/2, images.needle:getHeight()/2)
+    love.graphics.draw(images.needle, love.graphics.getWidth()-75, 10, self.fuelrot, 0.05, 0.05, images.needle: getWidth()/2,
+        images.needle:getHeight()/2)
     love.graphics.setColor(255, 255, 255)
     for i = 0, self.quantity-1 do
         local r = math.sin(time*2*math.pi)*0.2
@@ -72,6 +77,8 @@ end
 
 function Plane:crash()
     tween(5, self, {size = 0.2}, "inQuad")
+    tween(5, self, {rotationspeed = 10}, "inCirc")
+    tween(5, self, {speed = 400}, "inCirc")
 end
 
 Package = class ("Package", Entity)
