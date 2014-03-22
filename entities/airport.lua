@@ -13,6 +13,7 @@ function Airport:draw()
 end
 
 function Airport:update(dt)
+    local plane = self.state.plane
     if (plane.position - self.position):len() < 20 and plane.landing == false then
         plane:land()
     end

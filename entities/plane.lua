@@ -40,7 +40,7 @@ function Plane:update(dt)
 
     local dir = Vector:new(0, -1)
     dir:rotate(self.direction)
-    dir = dir*dt*self.speed
+    dir = dir * dt * self.speed
     self.position = self.position + dir
     self.fuel = self.fuel - self.fuelconsumption*dt  
     if self.fuel <= 0 then
@@ -63,8 +63,7 @@ end
 
 function Plane:dropPackage()
     if self.quantity > 0 then
-        local package = Package:new(self)
-        table.insert(welt, package)
+        self.state:add(Package:new(self))
         self.quantity = self.quantity - 1
     end
 end
@@ -76,7 +75,7 @@ function Plane:crash()
     tween(5, self, {size = 0.2}, "inQuad")
     tween(5, self, {rotationspeed = 10}, "inCirc")
     tween(5, self, {speed = 0}, "inCirc", function() 
-        table.insert(welt, Explosion:new(self.position:clone()))
+        self.state:add(Explosion:new(self.position:clone()))
     end)
 end
 

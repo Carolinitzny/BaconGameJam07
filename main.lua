@@ -10,45 +10,15 @@ require "entities/particles"
 require "entities/target"
 require "indicators"
 
-ui = {}
-welt = {}
-generated = {left = 0, right = 0, top = 0, bottom = 0}
-images = {}
-time = 0
-function isVillageNearby(pos, threshold)
-    for k, v in pairs(welt) do
-        if v:isInstanceOf(Village) then
-            local diff = v.position - pos
-            if diff:len() < threshold then
-                return true
-            end
-        end    
-    end    
-    return false
-end
-
-function generateVillages(left, right, top, bottom)
-    local density = 1.5/(800*600)
-    local area = math.abs((right - left)* (bottom - top))
-    local count = area * density
-    
-    for k = 1, count do
-        for l = 1, 50 do
-            local pos = Vector:new(math.random(left,right), math.random(top, bottom))
-            if not isVillageNearby(pos, 700) or l == 50 then
-                village = Village:new(pos.x, pos.y)
-                target = Target:new(pos.x, pos.y)
-                table.insert(welt,village)
-                table.insert(welt,target)
-                break    
-            end 
-        end    
-    end
-end
+require "state"
+require "states/gamestate"
+require "states/menustate"
 
 function love.load()
+    time = 0
     math.randomseed(os.time())
 
+    images = {}
     images.plane = love.graphics.newImage("graphics/Plane.png")
     images.package = love.graphics.newImage("graphics/Package.png")
     images.houses = {}
@@ -62,71 +32,28 @@ function love.load()
     images.smoke = love.graphics.newImage("graphics/smoke.png")
     images.smokeRing = love.graphics.newImage("graphics/smokeRing.png")
 
-    ground = Ground:new()
-    table.insert(welt, ground)
-    village = Village:new(500, 500)
-    table.insert(welt,village)
-    airport = Airport:new(100, 100, 2)
-    table.insert(welt, airport)
-    plane = Plane:new(400, 300)
-    table.insert(welt, plane)
-    indicators = Indicators:new()
-    table.insert(ui, indicators)
+    states = {}
+    states.game = GameState:new()
+    states.menu = MenuState:new()
+
+    currentState = states.game
 end
 
 function love.update(dt)
     time = time + dt
     tween.update(dt)
-    for k,v in pairs(welt) do
-        v:update(dt)
-    end
-    for k,v in pairs(ui) do
-        v:update(dt)
-    end
-    offset = plane.position - Vector:new(love.graphics.getWidth(), love.graphics.getHeight())*0.5    
-    
-    --Generating villages
-    local distance = 2000
-    local g = generated
 
-    -- left
-    if plane.position.x < g.left + distance then
-        generateVillages(g.left - distance, g.left, g.top, g.bottom)
-        g.left = g.left - distance
-    end    
-    --right 
-    if plane.position.x > g.right - distance then
-        generateVillages(g.right, g.right + distance, g.top, g.bottom)
-        g.right = g.right + distance
-    end    
-    --top
-    if plane.position.y < g.top + distance then
-        generateVillages(g.left , g.right, g.top - distance, g.top)
-        g.top = g.top - distance
-    end
-    --bottom    
-    if plane.position.y > g.bottom - distance then
-        generateVillages(g.left, g.right, g.bottom, g.bottom + distance)
-        g.bottom = g.bottom + distance
-    end    
+    currentState:update(dt)
 end
 
 function love.draw()
-    love.graphics.push()
-    love.graphics.translate(-offset.x, -offset.y)
-    for k,v in pairs(welt) do
-        v:draw()
-    end 
-    love.graphics.pop()
-    for k,v in pairs(ui) do
-        v:draw()
-    end   
+    currentState:draw()
 end
 
 function love.keypressed(key)
-    if key == " " then
-        plane:dropPackage()
-    elseif key == "e" then
-        table.insert(welt, Explosion:new(plane.position))
+    if key == "escape" then
+        love.event.push("quit")
+    else
+        currentState:keypressed(key)
     end
 end

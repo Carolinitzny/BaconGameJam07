@@ -9,7 +9,7 @@ function Package:initialize(plane)
     self.altitude = 1 -- height above ground
     tween(1.0, self, {speed = 0}, "inQuad")
     tween(1, self, {altitude = 0}, "inQuad", function() 
-        table.insert(welt, SmokeRing:new(self.position:clone()))
+        self.state:add(SmokeRing:new(self.position:clone()))
     end)
 end
 

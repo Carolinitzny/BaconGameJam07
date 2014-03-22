@@ -5,6 +5,7 @@ Ground = class ("Ground", Entity)
 
 
 function Ground:draw()
+    local offset = self.state.offset or Vector:new(0, 0)
     local w = images.ground:getWidth()
     local h = images.ground:getHeight()
     local x1 = math.floor(offset.x/w) *w
