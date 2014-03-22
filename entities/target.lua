@@ -3,9 +3,10 @@ local class = require 'middleclass'
 require "entity"
 Target = class ("Village", Entity)
 
-function Target:initialize(x,y)
+function Target:initialize(x,y,village)
     self.position = Vector:new(x,y) 
     self.size = 10
+    self.village = village
 end
 
 function Target:draw()

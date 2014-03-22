@@ -83,7 +83,7 @@ function GameState:generateVillages(left, right, top, bottom)
             local pos = Vector:new(math.random(left,right), math.random(top, bottom))
             if not self:isVillageNearby(pos, 500) or l == 50 then
                 local village = Village:new(pos.x, pos.y)
-                local target = Target:new(pos.x, pos.y)
+                local target = Target:new(pos.x, pos.y, village)
                 self:add(village)
                 self:add(target)
                 break    

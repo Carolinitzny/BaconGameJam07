@@ -31,10 +31,13 @@ end
 function Package:landed()
     for k, v in pairs(self.state.world) do
         if v:isInstanceOf(Target) then
-            if math.abs(self.position.x - v.position.x) <= 50 and math.abs(self.position.y - v.position.y) <= 50 then
-                self.state:addScore(1)
+            if (self.position - v.position):len() < 30 then
+                self.state:addScore(v.village.count)
+                    if math.random(1,20) == 1 then
+                        self.state:addScore(-1)
+                    end
             end
         end  
-    end        
+    end 
 end
 
