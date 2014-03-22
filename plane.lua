@@ -15,43 +15,46 @@ function Plane:initialize(x, y)
     self.landing = false
     self.isChrashing = false
 
+    -- Trudel-Winkel, wird nicht in Richtung eingerechnet aber zum Drehen der Grafik verwendet
+    self.spinAngle = 0
+    self.spinAngleSpeed = 0
+
     -- particles
     self.smokeTrailLeft = SmokeTrail:new()
     self.smokeTrailRight = SmokeTrail:new()
 end 
 
 function Plane:update(dt)
-    if self.isChrashing == false then
+    if not self.isChrashing then
         if love.keyboard.isDown("left") then
             self.direction = self.direction - self.rotationspeed*dt
+            self.spinAngleSpeed = -self.rotationspeed
         end
         if love.keyboard.isDown("right") then
             self.direction = self.direction + self.rotationspeed*dt
+            self.spinAngleSpeed = self.rotationspeed
         end  
     else
-        self.direction = self.direction - self.rotationspeed*dt
+        self.spinAngle = self.spinAngle + self.spinAngleSpeed * dt
     end
+
     local dir = Vector:new(0, -1)
     dir:rotate(self.direction)
     dir = dir*dt*self.speed
     self.position = self.position + dir
     self.fuel = self.fuel - self.fuelconsumption*dt  
     if self.fuel <= 0 then
-        alive = false
-        if self.isChrashing == false then
-            self:crash()
-            self.isChrashing = true
-        end
+        self:crash()
     end
 
-    self.smokeTrailLeft.position = self.position + Vector:new(-40*self.size, 0):rotated(self.direction)
-    self.smokeTrailRight.position = self.position + Vector:new( 40*self.size, 0):rotated(self.direction)
+    self.smokeTrailLeft.position = self.position + Vector:new(-40*self.size, 0):rotated(self.direction + self.spinAngle)
+    self.smokeTrailRight.position = self.position + Vector:new( 40*self.size, 0):rotated(self.direction + self.spinAngle)
     self.smokeTrailLeft:update(dt)
     self.smokeTrailRight:update(dt)
 end
 
 function Plane:draw()
-    love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction, 
+    love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction + self.spinAngle, 
         self.size, self.size, images.plane:getWidth()/2, images.plane:getHeight()/2)
 
     self.smokeTrailLeft:draw()
@@ -67,9 +70,14 @@ function Plane:dropPackage()
 end
 
 function Plane:crash()
+    if self.isChrashing then return end
+    self.isChrashing = true
+
     tween(5, self, {size = 0.2}, "inQuad")
     tween(5, self, {rotationspeed = 10}, "inCirc")
-    tween(5, self, {speed = 400}, "inCirc")
+    tween(5, self, {speed = 0}, "inCirc", function() 
+        table.insert(welt, Explosion:new(self.position:clone()))
+    end)
 end
 
 function Plane:land()
@@ -96,6 +104,5 @@ function Plane:liftoff()
     tween(3, self, {size = 1}, "inQuad")
     tween(3, self, {altitude = 1}, "inQuad")
     self.landing = false
-    
 end
 
