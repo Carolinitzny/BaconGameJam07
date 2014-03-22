@@ -38,7 +38,7 @@ function Plane:update(dt)
 end
 
 function Plane:draw()
-    love.graphics.draw(image.plane, self.position.x , self.position.y , self.direction, 1 ,1, (image.plane:getWidth())/2, image.plane:getHeight()/2)
+    love.graphics.draw(images.plane, self.position.x , self.position.y , self.direction, 1 ,1, (images.plane:getWidth())/2, images.plane:getHeight()/2)
     love.graphics.setColor(255, 255, 255)
     love.graphics.setLineWidth(2)
     love.graphics.rectangle("line", love.graphics.getWidth()-100-20-5, 15, 110, 25) 
@@ -46,7 +46,7 @@ function Plane:draw()
     love.graphics.rectangle("fill", love.graphics.getWidth()-100-20, 20, self.fuel*100, 15)
     love.graphics.setColor(255, 255, 255)
     --[[for i = 1, plane.quantity do
-        love.graphics.draw(image.package, love.graphics.getWidth()-200 + ((i%5)*20), 50*(i), 0.15, 0.15)
+        love.graphics.draw(images.package, love.graphics.getWidth()-200 + ((i%5)*20), 50*(i), 0.15, 0.15)
     end]]--
 end
 
@@ -69,7 +69,7 @@ end
 function Package:draw()
     local s = 0.2 + 0.2*self.altitude
     love.graphics.setColor(255,255,255)
-    love.graphics.draw(image.package, self.position.x , self.position.y , 0, s ,s, (image.package:getWidth())/2, image.package:getHeight()/2)
+    love.graphics.draw(images.package, self.position.x , self.position.y , 0, s ,s, (images.package:getWidth())/2, images.package:getHeight()/2)
     
 end
 
