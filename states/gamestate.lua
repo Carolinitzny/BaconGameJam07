@@ -29,27 +29,28 @@ function GameState:update(dt)
 
     -- Generating villages
     local distance = 2000
+    local size = 400
     local g = self.generated
 
     -- left
     if self.plane.position.x < g.left + distance then
-        self:generateVillages(g.left - distance, g.left, g.top, g.bottom)
-        g.left = g.left - distance
+        self:generateVillages(g.left - size, g.left, g.top, g.bottom)
+        g.left = g.left - size
     end    
     --right 
     if self.plane.position.x > g.right - distance then
-        self:generateVillages(g.right, g.right + distance, g.top, g.bottom)
-        g.right = g.right + distance
+        self:generateVillages(g.right, g.right + size, g.top, g.bottom)
+        g.right = g.right + size
     end    
     --top
     if self.plane.position.y < g.top + distance then
-        self:generateVillages(g.left , g.right, g.top - distance, g.top)
-        g.top = g.top - distance
+        self:generateVillages(g.left , g.right, g.top - size, g.top)
+        g.top = g.top - size
     end
     --bottom    
     if self.plane.position.y > g.bottom - distance then
-        self:generateVillages(g.left, g.right, g.bottom, g.bottom + distance)
-        g.bottom = g.bottom + distance
+        self:generateVillages(g.left, g.right, g.bottom, g.bottom + size)
+        g.bottom = g.bottom + size
     end    
 end
 
@@ -75,14 +76,15 @@ end
 
 function GameState:generateVillages(left, right, top, bottom)
     --villages
-    local density = 1.5/(800*600)
+    local density = 1.2/(800*600)
     local area = math.abs((right - left)* (bottom - top))
     local count = area * density
     
     for k = 1, count do
         for l = 1, 50 do
             local pos = Vector:new(math.random(left,right), math.random(top, bottom))
-            if not self:isVillageNearby(pos, 500) or l == 50 then
+            if not self:isVillageNearby(pos, 200) or l == 50 then
+                if l == 50 then print("Meh village") end
                 local village = Village:new(pos.x, pos.y)
                 local target = Target:new(pos.x, pos.y, village)
                 self:add(village)
@@ -100,7 +102,8 @@ function GameState:generateVillages(left, right, top, bottom)
     for k = 1, count do
         for l = 1, 50 do
             local pos = Vector:new(math.random(left,right), math.random(top, bottom))
-            if not self:isVillageNearby(pos, 500) or l == 50 then
+            if not self:isVillageNearby(pos, 200) or l == 50 then
+                if l == 50 then print("Meh airport") end
                 local airport = Airport:new(pos.x, pos.y, math.random()*2*math.pi)
                 self:add(airport)
                 break    
