@@ -27,16 +27,16 @@ function love.load()
 end
 
 function love.update(dt)
+
     time = time + dt
     tween.update(dt)
     for k,v in pairs(welt) do
         v:update(dt)
-    end    
+    end
+    offset = plane.position - Vector:new(love.graphics.getWidth(), love.graphics.getHeight())*0.5    
 end
 
 function love.draw()
-
-    local offset = plane.position - Vector:new(love.graphics.getWidth(), love.graphics.getHeight())*0.5 
     love.graphics.push()
     love.graphics.translate(-offset.x, -offset.y)
     for k,v in pairs(welt) do
