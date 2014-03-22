@@ -11,7 +11,6 @@ end
 
 function Airport:draw()
     love.graphics.draw(self.image, self.position.x, self.position.y, self.orientation, 1, 1, self.image:getWidth() / 2, self.image:getHeight())
-    love.graphics.circle("fill", self.position.x, self.position.y, 5)
 end
 
 function Airport:update(dt)

@@ -57,11 +57,11 @@ function Plane:update(dt)
 end
 
 function Plane:draw()
-    love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction + self.spinAngle, 
-        self.size, self.size, images.plane:getWidth()/2, images.plane:getHeight()/2)
-
     self.smokeTrailLeft:draw()
     self.smokeTrailRight:draw()
+
+    love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction + self.spinAngle, 
+        self.size, self.size, images.plane:getWidth()/2, images.plane:getHeight()/2)
 end
 
 function Plane:dropPackage()

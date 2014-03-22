@@ -10,6 +10,7 @@ require "entities/airport"
 require "entities/particles"
 require "entities/target"
 require "indicators"
+require "minimap"
 
 require "state"
 require "states/gamestate"
@@ -41,6 +42,7 @@ function love.load()
     images.needle = love.graphics.newImage("graphics/Needle.png")
     images.smoke = love.graphics.newImage("graphics/smoke.png")
     images.smokeRing = love.graphics.newImage("graphics/smokeRing.png")
+    images.circle = love.graphics.newImage("graphics/circle.png")
 
     fonts = {}
     fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)

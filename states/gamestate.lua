@@ -19,6 +19,7 @@ function GameState:reset()
     self:add(self.plane)
 
     self:add(Indicators:new(), true)
+    self:add(Minimap:new(), true)
 end
 
 function GameState:update(dt)
