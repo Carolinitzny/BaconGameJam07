@@ -8,6 +8,7 @@ welt = {}
 generated = {left = 0, right = 0, top = 0, bottom = 0}
 images = {}
 time = 0
+alive = true
 
 function generateVillages(left, right, top, bottom)
 
@@ -71,10 +72,10 @@ function love.draw()
     love.graphics.translate(-offset.x, -offset.y)
     for k,v in pairs(welt) do
         v:draw()
-
     end 
     love.graphics.pop()   
 end
+
 function love.keypressed(key)
     if key == " " then
         plane:dropPackage()

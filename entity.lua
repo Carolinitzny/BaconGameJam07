@@ -20,6 +20,8 @@ function Plane:initialize(x, y)
     self.fuel = 1
     self.fuelconsumption = 0.05
     self.quantity = 20
+    self.altitude = 1
+    self.size = 1
 end 
 
 function Plane:update(dt)
@@ -33,12 +35,17 @@ function Plane:update(dt)
     dir:rotate(self.direction)
     dir = dir*dt*self.speed
     self.position = self.position + dir
-    self.fuel = self.fuel - self.fuelconsumption*dt
+    self.fuel = self.fuel - self.fuelconsumption*dt  
+    if self.fuel <= 0 then
+        alive = false
+        self:crash()
+    end
 
 end
 
 function Plane:draw()
-    love.graphics.draw(images.plane, self.position.x , self.position.y , self.direction, 1 ,1, (images.plane:getWidth())/2, images.plane:getHeight()/2)
+    love.graphics.draw(images.plane, self.position.x , self.position.y , self.direction, self.size, self.size, (images.plane:getWidth())/2, images.plane:getHeight()/2)
+    love.graphics.print(tostring(self.size))
     love.graphics.setColor(255, 255, 255)
     love.graphics.setLineWidth(2)
     love.graphics.rectangle("line", love.graphics.getWidth()-100-20-5, 15, 110, 25) 
@@ -62,6 +69,10 @@ function Plane:dropPackage()
     end
 end
 
+function Plane:crash()
+    tween(5, self, {size = 0}, "inQuad")
+end
+
 Package = class ("Package", Entity)
 function Package:initialize(plane)
     self.position = plane.position:clone()
@@ -69,8 +80,8 @@ function Package:initialize(plane)
     self.speed = plane.speed
     --Flughoehe
     self.altitude = 1
-    tween(2, self, {altitude = 0}, "inQuad")
     tween(1.5, self, {speed = 0}, "inQuad")
+    tween(2, self, {altitude = 0}, "inQuad")
 end
 
 function Package:draw()
