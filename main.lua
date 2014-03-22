@@ -15,6 +15,14 @@ require "state"
 require "states/gamestate"
 require "states/menustate"
 
+function table.remove(table, value)
+    for k,v in pairs(table) do
+        if v == value then
+            table[k] = nil
+        end
+    end
+end
+
 function love.load()
     time = 0
     math.randomseed(os.time())
@@ -32,6 +40,9 @@ function love.load()
     images.needle = love.graphics.newImage("graphics/Needle.png")
     images.smoke = love.graphics.newImage("graphics/smoke.png")
     images.smokeRing = love.graphics.newImage("graphics/smokeRing.png")
+
+    fonts = {}
+    fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)
 
     states = {}
     states.game = GameState:new()

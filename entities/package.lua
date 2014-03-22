@@ -33,10 +33,12 @@ function Package:landed()
         if v:isInstanceOf(Target) then
             if (self.position - v.position):len() < 30 then
                 self.state:addScore(v.village.count)
+                self.state:delete(v)
                     if math.random(1,20) == 1 then
                         self.state:addScore(-1)
                     end
             end
+            
         end  
     end 
 end
