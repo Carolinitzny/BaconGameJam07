@@ -3,6 +3,7 @@ local class = require 'middleclass'
 require "entity"
 require "village"
 require "ground"
+require "target"
 
 welt = {}
 generated = {left = 0, right = 0, top = 0, bottom = 0}
@@ -31,7 +32,9 @@ function generateVillages(left, right, top, bottom)
             local pos = Vector:new(math.random(left,right), math.random(top, bottom))
             if not isVillageNearby(pos, 500) or l == 100 then
                 village = Village:new(pos.x, pos.y)
+                target = Target:new(pos.x, pos.y)
                 table.insert(welt,village)
+                table.insert(welt,target)
                 break    
             end 
         end    
