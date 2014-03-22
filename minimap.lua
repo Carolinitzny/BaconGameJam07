@@ -4,9 +4,9 @@ require "entity"
 Minimap = class("Minimap", Entity)
 
 function Minimap:initialize()    
-    self.position = Vector:new(120, 100)
-    self.size = Vector:new(200, 160)
-    self.zoom = self.size.x/love.graphics.getWidth() * 0.4
+    self.position = Vector:new(100, 100)
+    self.size = Vector:new(160, 160)
+    self.zoom = self.size.x/love.graphics.getWidth() * 0.33
 end    
 
 function Minimap:draw()
@@ -38,8 +38,10 @@ function Minimap:draw()
                     love.graphics.draw(images.circle,  0,  0, 0, r, r)
                 end
             elseif v:isInstanceOf(Airport) then
-                love.graphics.setColor(0, 255, 0)
+                love.graphics.setColor(255, 255, 255, 100)
                 love.graphics.rectangle("fill", -2, -12, 4, 12)
+                love.graphics.setColor(255, 255, 255)
+                love.graphics.rectangle("fill", -2, 0, 4, 2)
             end
             love.graphics.pop()
         end
@@ -51,10 +53,10 @@ function Minimap:draw()
     local p3 = self.position + Vector:new( 0,  2):rotated(plane.direction)
     local p4 = self.position + Vector:new(-5,  5):rotated(plane.direction)
     love.graphics.polygon("fill", p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y)
-    love.graphics.setColor(255, 255, 255)
 
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("line", self.position.x - self.size.x / 2, self.position.y - self.size.y / 2, self.size.x, self.size.y)
 
     love.graphics.setScissor()
+    love.graphics.setColor(255, 255, 255)
 end    
