@@ -58,7 +58,6 @@ function GameState:draw()
     self:drawWorld()
     love.graphics.pop()
     self:drawUI()
-    love.graphics.print(self.score)
 end
 
 function GameState:isVillageNearby(pos, threshold)

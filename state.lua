@@ -16,6 +16,12 @@ function State:add(entity, ui)
     entity:onAdd(self)
 end
 
+function State:delete(entity)
+    table.remove(self.world, entity)
+    table.remove(self.ui, entity)
+    entity.state = nil
+end 
+
 function State:update(dt)
     self:updateEntities(dt)
 end

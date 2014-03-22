@@ -8,7 +8,7 @@ function Plane:initialize(x, y)
     self.direction = 0
     self.rotationspeed = 0.9
     self.fuel = 1
-    self.fuelconsumption = 0.05
+    self.fuelconsumption = 0.025
     self.quantity = 12
     self.altitude = 1
     self.landing = false
@@ -79,6 +79,7 @@ function Plane:crash()
     tween(3, self, {speed = 0}, "inCirc", function() 
         self.state:add(Explosion:new(self.position:clone()))
     end)
+    highscore.add("Hans-Peter", self.state.score)
 end
 
 function Plane:land()

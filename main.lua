@@ -1,4 +1,5 @@
 tween = require 'tween'
+highscore = require 'sick'
 local class = require 'middleclass'
 require "entity"
 require "entities/plane"
@@ -13,6 +14,14 @@ require "indicators"
 require "state"
 require "states/gamestate"
 require "states/menustate"
+
+function table.remove(table, value)
+    for k,v in pairs(table) do
+        if v == value then
+            table[k] = nil
+        end
+    end
+end
 
 function love.load()
     time = 0
@@ -32,11 +41,16 @@ function love.load()
     images.smoke = love.graphics.newImage("graphics/smoke.png")
     images.smokeRing = love.graphics.newImage("graphics/smokeRing.png")
 
+    fonts = {}
+    fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)
+
     states = {}
     states.game = GameState:new()
     states.menu = MenuState:new()
 
     currentState = states.game
+    
+    highscore.set("highscore", 10, "nobody", 0)
 end
 
 function love.update(dt)
@@ -52,6 +66,7 @@ end
 
 function love.keypressed(key)
     if key == "escape" then
+        highscore.save()
         love.event.push("quit")
     else
         currentState:keypressed(key)
