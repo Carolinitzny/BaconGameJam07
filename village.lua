@@ -1,6 +1,6 @@
 local class = require 'middleclass'
-
 require "entity"
+
 Village = class ("Village", Entity)
 function Village:initialize(x,y)
     self.position = Vector:new(x,y) 

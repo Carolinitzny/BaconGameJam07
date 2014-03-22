@@ -1,6 +1,8 @@
 tween = require 'tween'
 local class = require 'middleclass'
 require "entity"
+require "plane"
+require "package"
 require "village"
 require "ground"
 require "airport"
