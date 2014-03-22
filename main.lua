@@ -7,6 +7,7 @@ require "entities/village"
 require "entities/ground"
 require "entities/airport"
 require "entities/particles"
+require "entities/target"
 require "indicators"
 
 ui = {}
@@ -36,7 +37,9 @@ function generateVillages(left, right, top, bottom)
             local pos = Vector:new(math.random(left,right), math.random(top, bottom))
             if not isVillageNearby(pos, 700) or l == 50 then
                 village = Village:new(pos.x, pos.y)
+                target = Target:new(pos.x, pos.y)
                 table.insert(welt,village)
+                table.insert(welt,target)
                 break    
             end 
         end    
