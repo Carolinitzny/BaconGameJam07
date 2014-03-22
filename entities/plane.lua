@@ -42,7 +42,7 @@ function Plane:update(dt)
     dir:rotate(self.direction)
     dir = dir * dt * self.speed
     self.position = self.position + dir
-    self.fuel = self.fuel - self.fuelconsumption*dt  
+    self.fuel = math.max(0, self.fuel - self.fuelconsumption*dt)
     if self.fuel <= 0 then
         self:crash()
     end
