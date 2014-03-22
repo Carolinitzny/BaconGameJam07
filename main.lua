@@ -18,6 +18,8 @@ function love.load()
     images.houses[2] = love.graphics.newImage("graphics/House3.png")
     images.church = love.graphics.newImage("graphics/House2.png")
     images.ground = love.graphics.newImage("graphics/background.png")
+    images.gauge = love.graphics.newImage("graphics/Gauge.png")
+    images.needle = love.graphics.newImage("graphics/Needle.png")
 
     ground = Ground:new()
     table.insert(welt, ground)

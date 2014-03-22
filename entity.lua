@@ -22,6 +22,8 @@ function Plane:initialize(x, y)
     self.quantity = 20
     self.altitude = 1
     self.size = 1
+    self.isChrashing = false
+    self.fuelrot = 0
 end 
 
 function Plane:update(dt)
@@ -38,27 +40,26 @@ function Plane:update(dt)
     self.fuel = self.fuel - self.fuelconsumption*dt  
     if self.fuel <= 0 then
         alive = false
-        self:crash()
+        if self.isChrashing == false then
+            self:crash()
+            self.isChrashing = true
+        end
     end
-
+    self.fuelrot = self.fuel*((3/2)*math.pi)
 end
 
 function Plane:draw()
-    love.graphics.draw(images.plane, self.position.x , self.position.y , self.direction, self.size, self.size, (images.plane:getWidth())/2, images.plane:getHeight()/2)
+    love.graphics.draw(images.plane, self.position.x , self.position.y , self.direction, self.size, self.size, (images.plane:getWidth())/2,
+        images.plane:getHeight()/2)
     love.graphics.print(tostring(self.size))
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.setLineWidth(2)
-    love.graphics.rectangle("line", love.graphics.getWidth()-100-20-5, 15, 110, 25) 
-    love.graphics.setColor(255 - 255*self.fuel, 255*self.fuel, 0)
-    love.graphics.rectangle("fill", love.graphics.getWidth()-100-20, 20, self.fuel*100, 15)
+    love.graphics.draw(images.gauge, love.graphics.getWidth()-75, 10, 0, 0.05, 0.05, images.gauge:getWidth()/2, images.gauge:getHeight()/2)
+    love.graphics.draw(images.needle, love.graphics.getWidth()-75, 10, self.fuelrot, 0.05, 0.05, images.needle:       getWidth()/2, images.needle:getHeight()/2)
     love.graphics.setColor(255, 255, 255)
     for i = 0, self.quantity-1 do
         local r = math.sin(time*2*math.pi)*0.2
-        love.graphics.draw(images.package, love.graphics.getWidth()-115 + ((i%5)*20), 50 + math.floor(i/5)*20, r, 0.15, 0.15, (images.package:getWidth          ())/2, images.package:getHeight()/2)
+        love.graphics.draw(images.package, love.graphics.getWidth()-115 + ((i%5)*20), 50 + math.floor(i/5)*20, r, 0.15, 0.15,
+            (images.package:getWidth())/2, images.package:getHeight()/2)
     end
-    --[[for i = 20-1, self.quantity, -1 do
-        love.graphics.rectangle("fill", love.graphics.getWidth()-115 + ((i%5)*20), 50 + math.floor(i/5)*20, 10, 10)
-    end]]--
 end
 
 function Plane:dropPackage()
@@ -70,7 +71,7 @@ function Plane:dropPackage()
 end
 
 function Plane:crash()
-    tween(5, self, {size = 0}, "inQuad")
+    tween(5, self, {size = 0.2}, "inQuad")
 end
 
 Package = class ("Package", Entity)
