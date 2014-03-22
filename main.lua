@@ -4,6 +4,7 @@ require "entity"
 require "village"
 welt = {}
 images = {}
+time = 0
 
 function love.load()
     images.plane = love.graphics.newImage("graphics/Plane.png")
@@ -20,6 +21,7 @@ function love.load()
 end
 
 function love.update(dt)
+    time = time + dt
     tween.update(dt)
     for k,v in pairs(welt) do
         v:update(dt)
