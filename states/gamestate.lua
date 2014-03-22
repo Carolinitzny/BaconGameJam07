@@ -10,6 +10,8 @@ function GameState:initialize()
 end
 
 function GameState:reset()
+    self.score = 0
+    
     self:add(Ground:new())
     self:add(Airport:new(0, -400, 0))
 
@@ -56,6 +58,7 @@ function GameState:draw()
     self:drawWorld()
     love.graphics.pop()
     self:drawUI()
+    love.graphics.print(self.score)
 end
 
 function GameState:isVillageNearby(pos, threshold)
@@ -95,4 +98,8 @@ function GameState:keypressed(key)
     elseif key == "tab" then
         currentState = states.menu
     end
+end
+
+function GameState:addScore(s)
+    self.score = self.score + s
 end
