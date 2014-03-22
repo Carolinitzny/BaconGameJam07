@@ -9,12 +9,15 @@ function Airport:initialize(x,y,rotation)
 end
 
 function Airport:draw()
-    love.graphics.draw(self.image, self.x, self.y, self.orientation, 0.3, 0.3, 280, 425)
+    love.graphics.draw(self.image, self.position.x, self.position.y, self.orientation, 1, 1, self.image:getWidth() / 2, self.image:getHeight())
+    love.graphics.circle("fill", self.position.x, self.position.y, 5)
 end
 
 function Airport:update(dt)
     local plane = self.state.plane
-    if (plane.position - self.position):len() < 20 and plane.landing == false then
+    local distance = (plane.position - self.position):len()
+    local angleDifference = math.abs(((plane.direction - self.orientation) + math.pi) % (2 * math.pi) - math.pi)
+    if distance < 20 and angleDifference < 0.2 and not plane.landing then
         plane:land()
     end
 end
