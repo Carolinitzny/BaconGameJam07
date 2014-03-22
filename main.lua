@@ -11,7 +11,13 @@ time = 0
 alive = true
 
 function generateVillages(left, right, top, bottom)
-
+    local density = 3/(800*600)
+    local area = math.abs((right - left)* (bottom - top))
+    local count = area * density
+    for k=1, count do
+        village = Village:new(math.random(left,right), math.random(top, bottom))
+        table.insert(welt,village)
+    end
 end
 
 function love.load()
