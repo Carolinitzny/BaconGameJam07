@@ -1,8 +1,7 @@
 local class = require 'middleclass'
-
 require "entity"
-Airport = class ("Airport", Entity)
 
+Airport = class ("Airport", Entity)
 function Airport:initialize(x,y,rotation)
     self.position = Vector:new(x,y)
     self.orientation = rotation

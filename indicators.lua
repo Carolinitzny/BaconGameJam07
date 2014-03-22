@@ -1,5 +1,4 @@
 local class = require 'middleclass'
-
 require "entity"
 
 Indicators = class("Indicators", Entity)
