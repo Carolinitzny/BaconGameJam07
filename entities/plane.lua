@@ -101,7 +101,7 @@ end
 
 function Plane:liftoff()
     self.rotationspeed = 0.9
-    self.fuelconsumption = 0.05
+    self.fuelconsumption = 0.025
     tween(1, self, {speed = 140}, "outQuad")
     tween(2, self, {altitude = 1}, "inQuad")
     self.landing = false

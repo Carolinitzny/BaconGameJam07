@@ -8,9 +8,12 @@ function Village:initialize(x,y)
     self.houses = {}
     for k = 1, self.count do
         local house = {}
+        local direc = Vector:new(math.random(30,60), 0)
+        direc:rotate(k*(math.pi*2)/self.count)
         house.image = images.houses[math.random(#images.houses)]
-        house.x = math.random(-50, 50)
-        house.y = math.random(-50, 50)
+
+        house.x = direc.x
+        house.y = direc.y
         table.insert(self.houses,house)
     end 
     if math.random()< 0.33 then
