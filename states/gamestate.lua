@@ -13,7 +13,6 @@ function GameState:reset()
     self.score = 0
     
     self:add(Ground:new())
-    self:add(Airport:new(0, -400, 0))
 
     self.plane = Plane:new(0, 0)
     self:add(self.plane)
