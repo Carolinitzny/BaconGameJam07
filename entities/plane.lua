@@ -2,6 +2,7 @@ local class = require 'middleclass'
 require "entity"
 
 Plane = class ("Plane", Entity)
+Plane.z = 5
 function Plane:initialize(x, y)
     self.position = Vector:new(x,y)
     self.speed = 140
@@ -42,7 +43,7 @@ function Plane:update(dt)
     dir:rotate(self.direction)
     dir = dir * dt * self.speed
     self.position = self.position + dir
-    self.fuel = self.fuel - self.fuelconsumption*dt  
+    self.fuel = math.max(0, self.fuel - self.fuelconsumption*dt)
     if self.fuel <= 0 then
         self:crash()
     end
@@ -79,6 +80,7 @@ function Plane:crash()
     tween(3, self, {speed = 0}, "inCirc", function() 
         self.state:add(Explosion:new(self.position:clone()))
     end)
+    highscore.add("Hans-Peter", self.state.score)
 end
 
 function Plane:land()

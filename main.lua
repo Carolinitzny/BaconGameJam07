@@ -1,4 +1,5 @@
 tween = require 'tween'
+highscore = require 'sick'
 local class = require 'middleclass'
 require "entity"
 require "entities/plane"
@@ -48,6 +49,8 @@ function love.load()
     states.menu = MenuState:new()
 
     currentState = states.game
+    
+    highscore.set("highscore", 10, "nobody", 0)
 end
 
 function love.update(dt)
@@ -63,6 +66,7 @@ end
 
 function love.keypressed(key)
     if key == "escape" then
+        highscore.save()
         love.event.push("quit")
     else
         currentState:keypressed(key)

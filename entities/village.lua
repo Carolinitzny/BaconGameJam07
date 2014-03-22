@@ -2,6 +2,7 @@ local class = require 'middleclass'
 require "entity"
 
 Village = class ("Village", Entity)
+Village.z = 2
 function Village:initialize(x,y)
     self.position = Vector:new(x,y) 
     self.count = math.random(3,10)
