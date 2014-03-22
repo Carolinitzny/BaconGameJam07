@@ -22,6 +22,7 @@ function Plane:initialize(x, y)
     self.quantity = 20
     self.altitude = 1
     self.size = 1
+    self.landing = false
 end 
 
 function Plane:update(dt)
@@ -71,6 +72,25 @@ end
 
 function Plane:crash()
     tween(5, self, {size = 0}, "inQuad")
+end
+
+function Plane:land()
+    self.rotationspeed = 0
+    self.fuelconsumption = 0
+    tween(3, self, {size = 0.3}, "inQuad")
+    tween(3, self, {altitude = 0}, "inQuad")
+    tween(5, self, {speed = 0}, "inQuad", function()
+        
+    end)
+end
+
+function Plane:liftoff()
+    self.rotationspeed = 0.9
+    self.fuelconsumption = 0.05
+    tween(5, self, {speed = 140}, "inQuad")
+    tween(3, self, {size = 1}, "inQuad")
+    tween(3, self, {altitude = 1}, "inQuad")
+    
 end
 
 Package = class ("Package", Entity)

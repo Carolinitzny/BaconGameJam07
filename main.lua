@@ -3,6 +3,7 @@ local class = require 'middleclass'
 require "entity"
 require "village"
 require "ground"
+require "airport"
 welt = {}
 images = {}
 time = 0
@@ -18,11 +19,14 @@ function love.load()
     images.houses[2] = love.graphics.newImage("graphics/House3.png")
     images.church = love.graphics.newImage("graphics/House2.png")
     images.ground = love.graphics.newImage("graphics/background.png")
+    images.airport = love.graphics.newImage("graphics/Airport.png")
 
     ground = Ground:new()
     table.insert(welt, ground)
     village = Village:new(500, 500)
     table.insert(welt,village)
+    airport = Airport:new(100, 100)
+    table.insert(welt, airport)
     plane = Plane:new(400, 300)
     table.insert(welt, plane)
 end
