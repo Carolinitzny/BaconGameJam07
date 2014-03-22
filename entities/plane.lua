@@ -79,6 +79,7 @@ function Plane:crash()
     tween(3, self, {speed = 0}, "inCirc", function() 
         self.state:add(Explosion:new(self.position:clone()))
     end)
+    highscore.add("Hans-Peter", self.state.score)
 end
 
 function Plane:land()
