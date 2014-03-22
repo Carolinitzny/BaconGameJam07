@@ -92,6 +92,7 @@ function Plane:land()
 end
 
 function Plane:refuel()
+    tween (2, self, {quantity = 12})
     tween(1.5, self, {direction = self.direction + math.pi})
     tween(2, self, {fuel = 1}, "inOutQuad", function()
         self:liftoff()
