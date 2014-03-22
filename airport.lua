@@ -14,9 +14,7 @@ function Airport:draw()
 end
 
 function Airport:update(dt)
-    if (plane.position - self.position):len() < 20 
-        and math.abs(plane.direction - self.orientation) < 0.1
-        and plane.landing == false then
+    if (plane.position - self.position):len() < 20 and plane.landing == false then
         plane:land()
     end
 end

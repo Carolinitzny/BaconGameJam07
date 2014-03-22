@@ -76,13 +76,20 @@ function Plane:crash()
 end
 
 function Plane:land()
+    self.landing = true
     self.rotationspeed = 0
     self.fuelconsumption = 0
     tween(3, self, {size = 0.3}, "inQuad")
     tween(3, self, {altitude = 0}, "inQuad")
     tween(5, self, {speed = 0}, "inQuad", function()
-        
+        plane:refule()
     end)
+end
+
+function Plane:refule()
+    tween(5, self, {fuel = 1}, "inQuad", function()
+        plane:liftoff()
+        end)
 end
 
 function Plane:liftoff()
@@ -91,6 +98,7 @@ function Plane:liftoff()
     tween(5, self, {speed = 140}, "inQuad")
     tween(3, self, {size = 1}, "inQuad")
     tween(3, self, {altitude = 1}, "inQuad")
+    self.landing = false
     
 end
 
