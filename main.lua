@@ -5,6 +5,7 @@ require "village"
 welt = {}
 images = {}
 time = 0
+alive = true
 
 function love.load()
     images.plane = love.graphics.newImage("graphics/Plane.png")
@@ -25,7 +26,7 @@ function love.update(dt)
     tween.update(dt)
     for k,v in pairs(welt) do
         v:update(dt)
-    end    
+    end  
 end
 
 function love.draw()
@@ -33,6 +34,7 @@ function love.draw()
         v:draw()
     end    
 end
+
 function love.keypressed(key)
     if key == " " then
         plane:dropPackage()
