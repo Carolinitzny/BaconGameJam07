@@ -2,6 +2,7 @@ local class = require 'middleclass'
 require "entity"
 
 Plane = class ("Plane", Entity)
+Plane.z = 5
 function Plane:initialize(x, y)
     self.position = Vector:new(x,y)
     self.speed = 140

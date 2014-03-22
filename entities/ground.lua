@@ -2,7 +2,7 @@ local class = require 'middleclass'
 
 require "entity"
 Ground = class ("Ground", Entity)
-
+Ground.z = 0
 
 function Ground:draw()
     local offset = self.state.offset or Vector:new(0, 0)
