@@ -9,14 +9,32 @@ generated = {left = 0, right = 0, top = 0, bottom = 0}
 images = {}
 time = 0
 alive = true
+function isVillageNearby(pos, threshold)
+    for k, v in pairs(welt) do
+        if v:isInstanceOf(Village) then
+            local diff = v.position - pos
+            if diff:len() < threshold then
+                return true
+            end
+        end    
+    end    
+    return false
+end
 
 function generateVillages(left, right, top, bottom)
-    local density = 3/(800*600)
+    local density = 2/(800*600)
     local area = math.abs((right - left)* (bottom - top))
     local count = area * density
-    for k=1, count do
-        village = Village:new(math.random(left,right), math.random(top, bottom))
-        table.insert(welt,village)
+    
+    for k = 1, count do
+        for l = 1, 100 do
+            local pos = Vector:new(math.random(left,right), math.random(top, bottom))
+            if not isVillageNearby(pos, 500) or l == 100 then
+                village = Village:new(pos.x, pos.y)
+                table.insert(welt,village)
+                break    
+            end 
+        end    
     end
 end
 
