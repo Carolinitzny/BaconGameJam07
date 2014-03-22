@@ -5,6 +5,7 @@ require "village"
 require "ground"
 welt = {}
 images = {}
+time = 0
 
 function love.load()
     math.randomseed(os.time())
@@ -26,6 +27,7 @@ function love.load()
 end
 
 function love.update(dt)
+    time = time + dt
     tween.update(dt)
     for k,v in pairs(welt) do
         v:update(dt)

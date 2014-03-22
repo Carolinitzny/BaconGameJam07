@@ -45,14 +45,21 @@ function Plane:draw()
     love.graphics.setColor(255 - 255*self.fuel, 255*self.fuel, 0)
     love.graphics.rectangle("fill", love.graphics.getWidth()-100-20, 20, self.fuel*100, 15)
     love.graphics.setColor(255, 255, 255)
-    --[[for i = 1, plane.quantity do
-        love.graphics.draw(images.package, love.graphics.getWidth()-200 + ((i%5)*20), 50*(i), 0.15, 0.15)
+    for i = 0, self.quantity-1 do
+        local r = math.sin(time*2*math.pi)*0.2
+        love.graphics.draw(images.package, love.graphics.getWidth()-115 + ((i%5)*20), 50 + math.floor(i/5)*20, r, 0.15, 0.15, (images.package:getWidth          ())/2, images.package:getHeight()/2)
+    end
+    --[[for i = 20-1, self.quantity, -1 do
+        love.graphics.rectangle("fill", love.graphics.getWidth()-115 + ((i%5)*20), 50 + math.floor(i/5)*20, 10, 10)
     end]]--
 end
 
 function Plane:dropPackage()
-    local package = Package:new(self)
-    table.insert(welt, package)
+    if self.quantity > 0 then
+        local package = Package:new(self)
+        table.insert(welt, package)
+        self.quantity = self.quantity - 1
+    end
 end
 
 Package = class ("Package", Entity)
