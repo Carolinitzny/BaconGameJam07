@@ -5,6 +5,7 @@ require "village"
 require "ground"
 require "airport"
 require "indicators"
+require "particles"
 
 ui = {}
 welt = {}
@@ -53,6 +54,7 @@ function love.load()
     images.airport = love.graphics.newImage("graphics/Airport.png")
     images.gauge = love.graphics.newImage("graphics/Gauge.png")
     images.needle = love.graphics.newImage("graphics/Needle.png")
+    images.smoke = love.graphics.newImage("graphics/smoke.png")
 
     ground = Ground:new()
     table.insert(welt, ground)
@@ -118,5 +120,7 @@ end
 function love.keypressed(key)
     if key == " " then
         plane:dropPackage()
+    elseif key == "e" then
+        table.insert(welt, Explosion:new(plane.position))
     end
 end

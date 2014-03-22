@@ -3,13 +3,8 @@ local class = require 'middleclass'
 require "vector"
 Entity = class ("Entity")
 
-function Entity:update(dt)
-
-end 
-function Entity:draw()
-
-end
-
+function Entity:update(dt) end 
+function Entity:draw() end
 
 Plane = class ("Plane", Entity)
 function Plane:initialize(x, y)
@@ -24,7 +19,10 @@ function Plane:initialize(x, y)
     self.size = 1
     self.landing = false
     self.isChrashing = false
-    
+
+    -- particles
+    self.smokeTrailLeft = SmokeTrail:new()
+    self.smokeTrailRight = SmokeTrail:new()
 end 
 
 function Plane:update(dt)
@@ -50,12 +48,19 @@ function Plane:update(dt)
             self.isChrashing = true
         end
     end
-    
+
+    self.smokeTrailLeft.position = self.position + Vector:new(-40*self.size, 0):rotated(self.direction)
+    self.smokeTrailRight.position = self.position + Vector:new( 40*self.size, 0):rotated(self.direction)
+    self.smokeTrailLeft:update(dt)
+    self.smokeTrailRight:update(dt)
 end
 
 function Plane:draw()
-    love.graphics.draw(images.plane, self.position.x , self.position.y , self.direction, self.size, self.size, (images.plane:getWidth())/2,
-        images.plane:getHeight()/2)
+    love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction, 
+        self.size, self.size, images.plane:getWidth()/2, images.plane:getHeight()/2)
+
+    self.smokeTrailLeft:draw()
+    self.smokeTrailRight:draw()
 end
 
 function Plane:dropPackage()
