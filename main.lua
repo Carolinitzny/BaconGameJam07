@@ -1,13 +1,13 @@
 tween = require 'tween'
 local class = require 'middleclass'
 require "entity"
-require "plane"
-require "package"
-require "village"
-require "ground"
-require "airport"
+require "entities/plane"
+require "entities/package"
+require "entities/village"
+require "entities/ground"
+require "entities/airport"
+require "entities/particles"
 require "indicators"
-require "particles"
 
 ui = {}
 welt = {}
@@ -57,6 +57,7 @@ function love.load()
     images.gauge = love.graphics.newImage("graphics/Gauge.png")
     images.needle = love.graphics.newImage("graphics/Needle.png")
     images.smoke = love.graphics.newImage("graphics/smoke.png")
+    images.smokeRing = love.graphics.newImage("graphics/smokeRing.png")
 
     ground = Ground:new()
     table.insert(welt, ground)

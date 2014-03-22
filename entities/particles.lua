@@ -4,7 +4,7 @@ require "entity"
 ParticleEntity = class("ParticleEntity", Entity)
 function ParticleEntity:initialize(position, image, count)
     self.position = position
-    self.particles = love.graphics.newParticleSystem(images.smoke, count or 100)
+    self.particles = love.graphics.newParticleSystem(image, count or 100)
 end
 
 function ParticleEntity:update(dt)
@@ -45,3 +45,14 @@ function SmokeTrail:initialize(position)
     self.particles:setSizes(0.05, 0.0)
 end
 
+SmokeRing = class("SmokeRing", ParticleEntity)
+function SmokeRing:initialize(position)
+    ParticleEntity.initialize(self, position, images.smokeRing, 1)
+    self.particles:setEmissionRate(100)
+    self.particles:setEmitterLifetime(1)
+    self.particles:setParticleLifetime(1)
+    self.particles:setColors(
+        100, 100, 0, 100,
+        255, 200, 0, 0)
+    self.particles:setSizes(0.1, 1.0)
+end
