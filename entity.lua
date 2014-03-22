@@ -17,6 +17,9 @@ function Plane:initialize(x, y)
     self.speed = 140
     self.direction = 0
     self.rotationspeed = 0.9
+    self.fuel = 1
+    self.fuelconsumption = 0.05
+    self.quantity = 20
 end 
 
 function Plane:update(dt)
@@ -30,11 +33,21 @@ function Plane:update(dt)
     dir:rotate(self.direction)
     dir = dir*dt*self.speed
     self.position = self.position + dir
+    self.fuel = self.fuel - self.fuelconsumption*dt
 
 end
 
 function Plane:draw()
     love.graphics.draw(image.plane, self.position.x , self.position.y , self.direction, 1 ,1, (image.plane:getWidth())/2, image.plane:getHeight()/2)
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.setLineWidth(2)
+    love.graphics.rectangle("line", love.graphics.getWidth()-100-20-5, 15, 110, 25) 
+    love.graphics.setColor(255 - 255*self.fuel, 255*self.fuel, 0)
+    love.graphics.rectangle("fill", love.graphics.getWidth()-100-20, 20, self.fuel*100, 15)
+    love.graphics.setColor(255, 255, 255)
+    --[[for i = 1, plane.quantity do
+        love.graphics.draw(image.package, love.graphics.getWidth()-200 + ((i%5)*20), 50*(i), 0.15, 0.15)
+    end]]--
 end
 
 function Plane:dropPackage()
@@ -51,7 +64,6 @@ function Package:initialize(plane)
     self.altitude = 1
     tween(2, self, {altitude = 0}, "inQuad")
     tween(1.5, self, {speed = 0}, "inQuad")
-
 end
 
 function Package:draw()
@@ -66,6 +78,6 @@ function Package:update(dt)
     dir:rotate(self.direction)
     dir = dir*dt*self.speed
     self.position = self.position + dir
-
+ 
 end
 

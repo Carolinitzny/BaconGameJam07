@@ -14,7 +14,6 @@ function love.update(dt)
     tween.update(dt)
     for k,v in pairs(welt) do
         v:update(dt)
-
     end    
 end
 
