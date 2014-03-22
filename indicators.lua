@@ -8,8 +8,8 @@ function Indicators:draw()
     local plane = self.state.plane
     local angle = plane.fuel*((3/2)*math.pi)
     if plane.fuel < 0.15 then
-        if time%2 < 1 then
-           love.graphics.setColor(255, 0, 0)
+        if (time*3)%1 < 0.5 then
+            love.graphics.setColor(255, 200, 200)
         else
            love.graphics.setColor(255, 255, 255)
         end
