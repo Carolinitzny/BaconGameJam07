@@ -6,13 +6,14 @@ welt = {}
 images = {}
 
 function love.load()
+    math.randomseed(os.time())
+
     images.plane = love.graphics.newImage("graphics/Plane.png")
     images.package = love.graphics.newImage("graphics/Package.png")
     images.houses = {}
     images.houses[1] = love.graphics.newImage("graphics/House1.png")
-    images.houses[2] = love.graphics.newImage("graphics/House2.png")
-    images.houses[3] = love.graphics.newImage("graphics/House3.png")
-    
+    images.houses[2] = love.graphics.newImage("graphics/House3.png")
+    images.church = love.graphics.newImage("graphics/House2.png")
     village = Village:new(500, 500)
     table.insert(welt,village)
     plane = Plane:new(400, 300)
