@@ -25,6 +25,7 @@ function Plane:initialize(x, y)
     self.size = 1
     self.stutter = false
     self.motorProblem = false
+    self.firstLanding = true
 
     self.landing = true
     self.altitude = 0
@@ -162,7 +163,6 @@ function Plane:crash()
             self.state:fadeOver(states.gameover)
         end)
     end)
-    
 end
 
 function Plane:land(airport)
@@ -186,7 +186,7 @@ function Plane:land(airport)
     tween(1.5, self, {speed = 0}, "inExpo", function()
         self:refuel()
     end)
-    
+    self.firstLanding = false
 end
 
 function Plane:refuel()
