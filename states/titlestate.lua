@@ -24,7 +24,7 @@ function TitleState:update(dt)
         self.musicCountdown = 30
     end
     self.music:setVolume(self.musicVolume)
-    self.music:play()
+    self.plane.sound:setVolume(self.musicVolume)
 
     self:updateEntities(dt)
     if time > 1 then
@@ -44,26 +44,37 @@ function TitleState:draw()
     self:drawWorld()
     self:drawUI()
 
-    local text = "Game Title Here"
+    local text = "The Hunger Planes"
     love.graphics.setColor(0, 0, 0)
     love.graphics.setFont(fonts.title)
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 100)
 
-    text = "Press any key to start"
+    love.graphics.setColor(0, 0, 0, 100 + 50 * math.abs(math.sin(time * 5)))
+    text = "Press space to start"
     love.graphics.setFont(fonts.writing30)
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 200)
+
+    love.graphics.setColor(0, 0, 0, 50)
+    text = "Created by Carolinitzny, julia.hertel, opatut and trojan4"
+    love.graphics.setFont(fonts.writing30)
+    love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, love.graphics.getHeight() - 100)
+
+    text = "for BaconGameJam 07 -- Theme: hungry"
+    love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, love.graphics.getHeight() - 60)
 
     love.graphics.setColor(255, 255, 255, 255 * self.fade)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
 
 function TitleState:keypressed(key)
-    tween(1, self, {musicVolume=0}, nil, function()
-        self.music:stop()
-    end)
-    tween(1, self, {fade=1}, "inOutQuad", function()
-        self.plane.sound:stop()
-        states.game:reset()
-        setState(states.game)
-    end)
+    if key == " " then
+        tween(1, self, {musicVolume=0}, nil, function()
+            self.music:stop()
+        end)
+        tween(1, self, {fade=1}, "inOutQuad", function()
+            self.plane.sound:stop()
+            states.game:reset()
+            setState(states.game)
+        end)
+    end
 end
