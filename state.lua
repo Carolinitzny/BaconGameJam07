@@ -40,6 +40,9 @@ function State:updateEntities(dt)
     end
 end
 
+function State:onScreen(pos, size)
+    return true
+end
 
 function State:drawWorld()
     table.sort(self.world, function(a, b)
@@ -50,7 +53,9 @@ function State:drawWorld()
         end
     end)
     for k,v in pairs(self.world) do
-        v:draw()
+        if v and (not v.position or self:onScreen(v.position, v.size or 200, 200)) then
+            v:draw()
+        end
     end
 end
 

@@ -46,7 +46,7 @@ function Plane:initialize(x, y)
     self.smokeTrailRight2 = SmokeTrail:new(self.position, self, 50, 50, 50)
     self.smokeTrailLeft2.particles:pause()
     self.smokeTrailRight2.particles:pause()
-    
+
     self:liftoff()
 end 
 
@@ -103,7 +103,7 @@ function Plane:update(dt)
 
     -- wind
     if not (self.isCrashing or self.landing or self.crashed) then
-        dir = dir + self.state:getWindVector(dt) * 0.2
+        dir = dir + self.state:getWindVector(dt) * 100
     end
 
     self.position = self.position + dir
@@ -114,10 +114,10 @@ function Plane:update(dt)
 
     self.size = 0.2 + 0.8 * self.altitude
 
-    self.smokeTrailLeft.position = self.position + Vector:new(-40*self.size, 0):rotated(self.direction + self.spinAngle)
-    self.smokeTrailRight.position = self.position + Vector:new( 40*self.size, 0):rotated(self.direction + self.spinAngle)
-    self.smokeTrailLeft2.position = self.position + Vector:new(-40*self.size, 0):rotated(self.direction + self.spinAngle)
-    self.smokeTrailRight2.position = self.position + Vector:new( 40*self.size, 0):rotated(self.direction + self.spinAngle)
+    self.smokeTrailLeft.position   = self.position + Vector:new(-35*self.size, 0):rotated(self.direction + self.spinAngle)
+    self.smokeTrailRight.position  = self.position + Vector:new( 35*self.size, 0):rotated(self.direction + self.spinAngle)
+    self.smokeTrailLeft2.position  = self.position + Vector:new(-35*self.size, 0):rotated(self.direction + self.spinAngle)
+    self.smokeTrailRight2.position = self.position + Vector:new( 35*self.size, 0):rotated(self.direction + self.spinAngle)
     
     self.smokeTrailLeft:update(dt)
     self.smokeTrailRight:update(dt)

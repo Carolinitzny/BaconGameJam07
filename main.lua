@@ -56,6 +56,7 @@ function love.load()
     images.bush = love.graphics.newImage("graphics/Bush.png")
     images.clouds = love.graphics.newImage("graphics/clouds.png")
     images.windsock = love.graphics.newImage("graphics/windsock.png")
+    images.minimapFrame = love.graphics.newImage("graphics/minimap-frame.png")
 
 
     sounds = {}

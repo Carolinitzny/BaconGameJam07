@@ -17,7 +17,7 @@ function GameState:reset()
     time = 0
 
     self.windDirection = 0
-    self.windStrength = 0
+    self.windSwing = 0
     GameOverState.highscore = false
     
     self:add(Ground:new())
@@ -32,15 +32,16 @@ function GameState:reset()
 end
 
 function GameState:getWindVector(dt)
-    return Vector:new(self.windFactor * self.windStrength * dt, 0):rotated(self.windDirection)
+    return Vector:new(self.windFactor * dt, 0):rotated(self.windDirection)
 end
 
 function GameState:update(dt)
     self:updateEntities(dt)
 
     self.windDirection = love.math.noise(10000+time*0.1) * math.pi
-    self.windStrength = time 
-    self.windFactor = love.math.noise(time*0.1)
+    local f = love.math.noise(time*0.4)
+    self.windFactor = f * (math.log(time * 0.01 + 1))
+    self.windSwing = self.windSwing + f * dt
 
     self.offset = self.plane.position - Vector:new(love.graphics.getWidth(), love.graphics.getHeight())*0.5    
 
@@ -80,7 +81,8 @@ function GameState:draw()
     self:drawUI()
 
     love.graphics.setColor(255, 255, 255)
-    love.graphics.draw(images.windsock, 100, 300, self:getWindVector(1):angleTo(Vector:new(-1, 0)), 1, self.windFactor, images.windsock:getWidth()/2, images.windsock:getHeight())
+    local angle = self:getWindVector(1):angleTo(Vector:new(-1, 0)) + math.sin(self.windSwing*5) * 0.1
+    love.graphics.draw(images.windsock, 100, 300, angle, 1, 0.5 + 0.5 *self.windFactor, images.windsock:getWidth()/2, images.windsock:getHeight())
 
     love.graphics.setColor(255, 255, 255, self.fade * 255)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
@@ -150,7 +152,6 @@ function GameState:generateWorld(left, right, top, bottom)
         local tornado = Tornado:new(pos.x, pos.y, tornado)
         self:add(tornado)
     end
-    
 end
 
 function GameState:keypressed(key)
@@ -181,4 +182,9 @@ end
 function GameState:onEnter()
     self.fade = 1
     tween(1, self, {fade=0}, "inOutQuad")
+end
+
+function GameState:onScreen(pos, size)
+    local screenSize = math.max(love.graphics.getWidth(), love.graphics.getHeight()) + size
+    return (self.plane.position - pos):len() < screenSize
 end
