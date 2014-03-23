@@ -33,7 +33,9 @@ function Package:landed()
     for k, v in pairs(self.state.world) do
         if v:isInstanceOf(Target) then
             if (self.position - v.position):len() < 30 then
-                if math.random(1,20) == 1 or true then
+                if math.random(1,20) == 1 then
+                    source = love.audio.newSource(sounds.kill)
+                    source:play()
                     self.state:addScore(-1)
                     self.state:add(Text(v.position - Vector:new(0, 50), "1 casualty", {255, 0, 0}, fonts.writing30))
                 end
@@ -45,9 +47,14 @@ function Package:landed()
         end  
     end 
     if not hit then
+        source = love.audio.newSource(sounds.hit)
+        source:play()
         local c = math.random(5, 20)
         self.state:add(Text(self.position, c .. " starved", {255, 0, 0}, fonts.writing30))
         self.state:addScore(-c)
+    else 
+        source = love.audio.newSource(sounds.plop)
+    source:play()
     end
 end
 
