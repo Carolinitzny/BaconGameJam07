@@ -53,6 +53,7 @@ function GameOverState:textinput(char)
 end
 
 function GameOverState:onEnter()
+    self.highscore = false
     self.fade = 1
     tween(1, self, {fade=0}, "inOutQuad")
 end

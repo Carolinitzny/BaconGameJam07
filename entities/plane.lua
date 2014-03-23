@@ -126,7 +126,6 @@ function Plane:crash()
             self.state:fadeOver(states.gameover)
         end)
     end)
-    GameOverState.highscore = false
     
 end
 
