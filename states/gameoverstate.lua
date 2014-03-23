@@ -6,6 +6,7 @@ function GameOverState:initialize()
     State.initialize(self)
     self.fade = 0
     self.name = ""
+    self.highscore = false
 end
 
 function GameOverState:update(dt)
@@ -33,7 +34,10 @@ end
 
 function GameOverState:keypressed(key)
     if key == "return" and self.name then
-        highscore.add(self.name, states.game.score)
+        if self.highscore == false then
+            highscore.add(self.name, states.game.score)
+            self.highscore = not self.highscore
+        end
         tween(1, self, {fade=1}, "inOutQuad", function()
             setState(states.menu)
             states.game:reset()

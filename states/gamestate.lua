@@ -14,6 +14,7 @@ function GameState:reset()
     self.offset = Vector:new()
     self.generated = {left = 0, right = 0, top = 0, bottom = 0}
     self.score = 0
+    GameOverState.highscore = false
     
     self:add(Ground:new())
 
