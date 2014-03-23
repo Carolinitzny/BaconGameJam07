@@ -39,18 +39,20 @@ end
 
 SmokeTrail = class("SmokeTrail", ParticleEntity)
 function SmokeTrail:initialize(position, plane, r, g, b)
+    ParticleEntity.initialize(self, position, images.smoke, 500)
     self.r = r
     self.g = g
     self.b = b
-    ParticleEntity.initialize(self, position, images.smoke, 200)
     self.plane = plane
-    self.particles:setEmissionRate(100)
-    self.particles:setParticleLifetime(2.0)
-    self.particles:setSizes(0.05, 0.0)
+    self.particles:setParticleLifetime(1.0)
+    self.particles:setSizes(0.1, 0.2)
+    self.particles:setSpeed(0, 10)
+    self.particles:setSpread(math.pi*2)
 end
 
 function SmokeTrail:update(dt)
     ParticleEntity.update(self, dt)
+    self.particles:setEmissionRate(100*self.plane.speed)
     self.particles:setColors(
         self.r, self.g, self.b, self.plane.altitude * 255,
         self.r, self.g, self.b, 0)
