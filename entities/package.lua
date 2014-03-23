@@ -32,7 +32,7 @@ function Package:landed()
     local hit = false
     for k, v in pairs(self.state.world) do
         if v:isInstanceOf(Target) then
-            if (self.position - v.position):len() < 30 then
+            if (self.position - v.position):len() < 15 then
                 if math.random(1,20) == 1 then
                     source = love.audio.newSource(sounds.kill)
                     source:play()

@@ -126,6 +126,15 @@ function GameState:generateWorld(left, right, top, bottom)
         self:add(vegetation)
     end
     
+    --tornado
+    local density = 0.05/(800*600)
+    local count = area*density
+    for k = 1, count do
+        local pos = Vector:new(math.random(left,right), math.random(top, bottom))
+        local tornado = Tornado:new(pos.x, pos.y, tornado)
+        self:add(tornado)
+    end
+    
 end
 
 function GameState:keypressed(key)
