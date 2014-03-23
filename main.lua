@@ -7,6 +7,7 @@ require "entity"
 require "entities/plane"
 require "entities/package"
 require "entities/village"
+require "entities/vegetation"
 require "entities/ground"
 require "entities/airport"
 require "entities/particles"
@@ -50,7 +51,10 @@ function love.load()
     images.smokeRing = love.graphics.newImage("graphics/smokeRing.png")
     images.circle = love.graphics.newImage("graphics/circle.png")
     images.crater = love.graphics.newImage("graphics/Crater.png")
+    images.oasis = love.graphics.newImage("graphics/Oasis.png")
+    images.bush = love.graphics.newImage("graphics/Bush.png")
     images.clouds = love.graphics.newImage("graphics/clouds.png")
+
 
     sounds = {}
     sounds.landing = love.sound.newSoundData("sound/landing.ogg")   
