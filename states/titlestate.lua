@@ -50,7 +50,7 @@ function TitleState:draw()
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 100)
 
     love.graphics.setColor(0, 0, 0, 100 + 50 * math.abs(math.sin(time * 5)))
-    text = "Press space to start"
+    text = "Press space to start (M for mute)"
     love.graphics.setFont(fonts.writing30)
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 200)
 

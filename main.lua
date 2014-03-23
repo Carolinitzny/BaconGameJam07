@@ -111,6 +111,8 @@ function love.keypressed(key)
     if key == "escape" then
         highscore.save()
         love.event.push("quit")
+    elseif key == "m" then
+        love.audio.setVolume(1 - love.audio.getVolume())
     else
         currentState:keypressed(key)
     end
