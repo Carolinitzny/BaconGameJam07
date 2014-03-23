@@ -14,6 +14,7 @@ require "entities/particles"
 require "entities/target"
 require "entities/text"
 require "entities/clouds"
+--require "entities/tornado"
 require "indicators"
 require "minimap"
 
