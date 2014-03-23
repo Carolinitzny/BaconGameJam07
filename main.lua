@@ -18,6 +18,7 @@ require "minimap"
 require "state"
 require "states/gamestate"
 require "states/menustate"
+require "states/gameoverstate"
 
 function setState(state)
     currentState = state
@@ -49,14 +50,30 @@ function love.load()
     images.circle = love.graphics.newImage("graphics/circle.png")
     images.crater = love.graphics.newImage("graphics/Crater.png")
 
+    sounds = {}
+    sounds.landing = love.sound.newSoundData("sound/landing.ogg")   
+    sounds.liftoff = love.sound.newSoundData("sound/liftoff.ogg")
+    sounds.kill = love.sound.newSoundData("sound/death.ogg")
+    sounds.crashing = love.sound.newSoundData("sound/crash.ogg")
+    sounds.hit = love.sound.newSoundData("sound/hit.ogg")
+    sounds.flight = love.sound.newSoundData("sound/normal_flight.ogg")
+    sounds.stutter_flight = love.sound.newSoundData("sound/stutter_flight.ogg")
+    sounds.drop = love.sound.newSoundData("sound/drop.ogg")
+    sounds.refuel = love.sound.newSoundData("sound/refuel.ogg")
+    sounds.plop = love.sound.newSoundData("sound/plop.ogg")
+    sounds.theme = love.sound.newSoundData("sound/theme.ogg")
+
+
     fonts = {}
     fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)
     fonts.writing30 = love.graphics.newFont("TMJ.ttf", 30)
     fonts.writing50 = love.graphics.newFont("TMJ.ttf", 50)
+    
     states = {}
     states.game = GameState:new()
     states.menu = MenuState:new()
-
+    states.gameover = GameOverState:new()
+    
     currentState = states.game
     
     highscore.set("highscore", 3, "nobody", 0)
@@ -80,6 +97,10 @@ function love.keypressed(key)
     else
         currentState:keypressed(key)
     end
+end
+
+function love.textinput(char)
+    currentState:textinput(char)
 end
 
 function love.mousepressed(x, y, b)
