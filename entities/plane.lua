@@ -22,6 +22,7 @@ function Plane:initialize(x, y)
     self.crashed = false
     self.size = 1
 
+
     -- Trudel-Winkel, wird nicht in Richtung eingerechnet aber zum Drehen der Grafik verwendet
     self.spinAngle = 0
     self.spinAngleSpeed = 0
@@ -98,9 +99,10 @@ end
 function Plane:crash()
     if self.isChrashing then return end
     self.isChrashing = true
-
-    tween(3, self, {altitude = 0}, "inQuad")
-    tween(3, self, {speed = 0}, "inCirc", function() 
+    source = love.audio.newSource(sounds.crashing)
+    source:play()
+    tween(2.6, self, {altitude = 0}, "inQuad")
+    tween(2.6, self, {speed = 0}, "inCirc", function() 
         self.state:add(Explosion:new(self.position:clone()))
         self.crashed = true
         Plane.z = 1
@@ -117,14 +119,14 @@ function Plane:land()
     source = love.audio.newSource(sounds.landing)
     source:play()
     tween(1, self, {altitude = 0}, "inOutQuad")
-    source = love.audio.newSource(sounds.liftoff)
-    source:play()
     tween(1.5, self, {speed = 0}, "inQuad", function()
         self:refuel()
     end)
 end
 
 function Plane:refuel()
+    source = love.audio.newSource(sounds.refuel)
+    source:play()
     tween (2, self, {quantity = 12})
     tween(1.5, self, {direction = self.direction + math.pi})
     tween(2, self, {fuel = 1}, "inOutQuad", function()
@@ -133,6 +135,8 @@ function Plane:refuel()
 end
 
 function Plane:liftoff()
+    source = love.audio.newSource(sounds.liftoff)
+    source:play()
     self.rotationspeed = 0.9
     self.fuelconsumption = 1
     tween(1, self, {speed = 1}, "outQuad")
