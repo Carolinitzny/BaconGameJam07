@@ -23,6 +23,8 @@ function Plane:initialize(x, y)
     self.isCrashing = false
     self.crashed = false
     self.size = 1
+    self.stutter = false
+    self.motorProblem = false
 
     self.landing = true
     self.altitude = 0
@@ -34,17 +36,35 @@ function Plane:initialize(x, y)
     self.sound:setLooping(true)
     -- self.sound:play()
 
-    -- Trudel-Winkel, wird nicht in Richtung eingerechnet aber zum Drehen der Grafik verwendet
+    -- Trudel-Winkel, wird nicht in Richtung eingerechnet, aber zum Drehen der Grafik verwendet
     self.spinAngle = 0
     self.spinAngleSpeed = 0
 
     -- particles
-    self.smokeTrailLeft = SmokeTrail:new(self.position, self)
-    self.smokeTrailRight = SmokeTrail:new(self.position, self)
+    self.smokeTrailLeft = SmokeTrail:new(self.position, self, 255, 255, 255)
+    self.smokeTrailRight = SmokeTrail:new(self.position, self, 255, 255, 255)
+    self.smokeTrailLeft2 = SmokeTrail:new(self.position, self, 200, 200, 200)
+    self.smokeTrailRight2 = SmokeTrail:new(self.position, self, 200, 200, 200)
+
 end 
 
 function Plane:update(dt)
-       
+    if math.random() < 1/30*dt and not self.motorProblem then 
+        self.motorProblem = true
+        tween(math.random()*2 + 1,{},{},nil,function()
+            self.motorProblem = false
+        end)
+    end
+    self.stutter = (time%0.15)< 0.1 and self.motorProblem
+    if self.stutter then
+        self.sound:pause()
+        
+    else
+        if not self.landing and not self.isCrashing and not self.crashed then
+            self.sound:play()
+        end
+          
+    end    
     if not self.isCrashing then
         local dir = 0
         local dirChangeSpeed = 5
@@ -85,14 +105,20 @@ function Plane:update(dt)
 
     self.smokeTrailLeft.position = self.position + Vector:new(-40*self.size, 0):rotated(self.direction + self.spinAngle)
     self.smokeTrailRight.position = self.position + Vector:new( 40*self.size, 0):rotated(self.direction + self.spinAngle)
+    self.smokeTrailLeft2.position = self.position + Vector:new(-40*self.size, 0):rotated(self.direction + self.spinAngle)
+    self.smokeTrailRight2.position = self.position + Vector:new( 40*self.size, 0):rotated(self.direction + self.spinAngle)
+    
     self.smokeTrailLeft:update(dt)
     self.smokeTrailRight:update(dt)
+    self.smokeTrailLeft2:update(dt)
+    self.smokeTrailRight2:update(dt)
 end
 
 function Plane:draw()
     self.smokeTrailLeft:draw()
     self.smokeTrailRight:draw()
-
+    self.smokeTrailLeft2:draw()
+    self.smokeTrailRight2:draw()
     if self.crashed == false then
         love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction + self.spinAngle, 
         self.size, self.size, images.plane:getWidth()/2, images.plane:getHeight()/2)

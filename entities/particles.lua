@@ -36,22 +36,22 @@ function Explosion:initialize(position)
 end
 
 SmokeTrail = class("SmokeTrail", ParticleEntity)
-function SmokeTrail:initialize(position, plane)
+function SmokeTrail:initialize(position, plane, r, g, b)
+    self.r = r
+    self.g = g
+    self.b = b
     ParticleEntity.initialize(self, position, images.smoke, 200)
     self.plane = plane
     self.particles:setEmissionRate(100)
     self.particles:setParticleLifetime(2.0)
-    self.particles:setColors(
-        255, 255, 255, 255,
-        255, 255, 255, 0)
     self.particles:setSizes(0.05, 0.0)
 end
 
 function SmokeTrail:update(dt)
     ParticleEntity.update(self, dt)
     self.particles:setColors(
-        255, 255, 255, self.plane.altitude * 255,
-        255, 255, 255, 0)
+        self.r, self.g, self.b, self.plane.altitude * 255,
+        self.r, self.g, self.b, 0)
 end
 
 SmokeRing = class("SmokeRing", ParticleEntity)
