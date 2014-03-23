@@ -29,8 +29,13 @@ function Village:initialize(x,y)
 end
 
 function Village:draw()
+    local image = images.smoke
+    love.graphics.setColor(200, 80, 0, 120)
+    love.graphics.draw(image, self.position.x, self.position.y, 0, 2, 2, image:getWidth() / 2, image:getHeight() / 2)
+    love.graphics.setColor(255, 255, 255)
+
     for k, v in pairs(self.houses) do
-        local s = 0.3
+        local s = 0.5
         local image =v.image
         love.graphics.draw(image,v.x + self.position.x, v.y + self.position.y,0,s,s,
             image:getWidth()/2, image:getHeight()/2)

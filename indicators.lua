@@ -3,7 +3,7 @@ require "entity"
 
 Indicators = class("Indicators", Entity)
 
-function Indicators:initialize()
+function Indicators:update(dt)
     self.size = love.graphics.getHeight() / 5
     self.position = Vector:new(love.graphics.getWidth() - self.size, self.size)
 end
@@ -18,7 +18,7 @@ function Indicators:draw()
         if (time*3)%1 < 0.5 then
             love.graphics.setColor(255, 200, 200)
         else
-           love.graphics.setColor(255, 255, 255)
+            love.graphics.setColor(255, 255, 255)
         end
     end
     local s = self.size/images.gauge:getWidth()
@@ -27,10 +27,14 @@ function Indicators:draw()
     love.graphics.setColor(255, 255, 255)
 
     -- packages left 
+    local dx, dy = 0.3 * self.size, self.size * 0.2
+    love.graphics.setColor(0, 0, 0, 200)
+    love.graphics.rectangle("fill", self.position.x - dx * 1.72, self.position.y + self.size * 0.8 - dy * 0.75, dx * 3.5, dy * 3.5)
+    love.graphics.setColor(255, 255, 255)
     for i = 0, plane.quantity-1 do
         local r = math.sin(time*2*math.pi+2*i) * 0.1
-        love.graphics.draw(images.package, self.position.x - 29 + (i%3) * 30, self.position.y + self.size * 0.8 + math.floor(i/3) * 20, 
-            r, 0.25, 0.25, images.package:getWidth()/2, images.package:getHeight()/2)
+        love.graphics.draw(images.package, self.position.x - dx + (i%3) * dx, self.position.y + self.size * 0.8 + math.floor(i/3) * dy, 
+            r, self.size/300, self.size/300, images.package:getWidth()/2, images.package:getHeight()/2)
     end
 
     -- score

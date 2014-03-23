@@ -3,7 +3,7 @@ require "entity"
 
 Minimap = class("Minimap", Entity)
 
-function Minimap:initialize()    
+function Minimap:update(dt)    
     local s = love.graphics.getHeight() / 3.5
     self.size = Vector:new(s, s)
     self.position = Vector:new(s * 0.6, s * 0.6)
