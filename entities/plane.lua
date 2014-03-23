@@ -153,6 +153,7 @@ function Plane:crash()
     self.sound:pause()
     source = love.audio.newSource(sounds.crashing)
     source:play()
+
     tween(2.6, self, {altitude = 0}, "inQuad")
     tween(2.6, self, {speed = 0}, "inCirc", function() 
         self.state:add(Explosion:new(self.position:clone()))

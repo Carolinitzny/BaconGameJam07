@@ -18,6 +18,16 @@ function Tornado:update(dt)
 
     self.particles.position = self.position
     self.particles:update(dt)
+
+    local plane = self.state.plane
+    local diff = plane.position - self.position
+    local len = diff:len()
+    if len < 120 and not (plane.landing or plane.crashed) then
+        if not plane.isCrashing then
+            plane:crash()
+        end
+        plane.spinAngleSpeed = plane.spinAngleSpeed + (1 - len/120) * 50 * dt
+    end
 end
 
 function Tornado:draw()
