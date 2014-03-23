@@ -3,8 +3,9 @@ require "entity"
 
 ParticleEntity = class("ParticleEntity", Entity)
 ParticleEntity.z = 4
-function ParticleEntity:initialize(position, image, count)
+function ParticleEntity:initialize(position, image, count, blendMode)
     self.position = position
+    self.blendMode = blendMode
     self.particles = love.graphics.newParticleSystem(image, count or 100)
 end
 
@@ -14,41 +15,44 @@ function ParticleEntity:update(dt)
 end
 
 function ParticleEntity:draw()
+    if self.blendMode then
+        love.graphics.setBlendMode(self.blendMode)
+    end
     love.graphics.draw(self.particles)
+    love.graphics.setBlendMode("alpha")
 end
 
 Explosion = class("Explosion", ParticleEntity)
+Explosion.z = 100
 function Explosion:initialize(position)
-    ParticleEntity.initialize(self, position, images.smoke, 100)
-    self.particles:setEmissionRate(1000)
-    self.particles:setEmitterLifetime(0.1)
-    self.particles:setParticleLifetime(1.5, 2.0)
-    self.particles:setRadialAcceleration(-50)
-    self.particles:setSpeed(100, 150)
-    self.particles:setColors(
-        255, 255, 200, 255,
-        50, 50, 50, 20,
-        0, 0, 0, 20,
-        0, 0, 0, 10,
-        0, 0, 0, 0)
-    self.particles:setSizes(0.1, 0.8)
+    ParticleEntity.initialize(self, position, images.smoke, 100, "additive")
     self.particles:setSpread(math.pi * 2)
+    self.particles:setBufferSize( 1000 )
+    self.particles:setEmissionRate( 4000 )
+    self.particles:setEmitterLifetime( 0.05 )
+    self.particles:setParticleLifetime( 0.5, 1.0 )
+    self.particles:setColors( 205, 50, 10, 255, 255, 115, 30, 0 )
+    self.particles:setSizes( 1, 2 , 0)
+    self.particles:setSpeed( 120, 140  )
+    self.particles:setRadialAcceleration( -150 )
 end
 
 SmokeTrail = class("SmokeTrail", ParticleEntity)
 function SmokeTrail:initialize(position, plane, r, g, b)
+    ParticleEntity.initialize(self, position, images.smoke, 500)
     self.r = r
     self.g = g
     self.b = b
-    ParticleEntity.initialize(self, position, images.smoke, 200)
     self.plane = plane
-    self.particles:setEmissionRate(100)
-    self.particles:setParticleLifetime(2.0)
-    self.particles:setSizes(0.05, 0.0)
+    self.particles:setParticleLifetime(1.0)
+    self.particles:setSizes(0.1, 0.2)
+    self.particles:setSpeed(0, 10)
+    self.particles:setSpread(math.pi*2)
 end
 
 function SmokeTrail:update(dt)
     ParticleEntity.update(self, dt)
+    self.particles:setEmissionRate(100*self.plane.speed)
     self.particles:setColors(
         self.r, self.g, self.b, self.plane.altitude * 255,
         self.r, self.g, self.b, 0)

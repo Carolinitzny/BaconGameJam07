@@ -40,7 +40,6 @@ function GameOverState:keypressed(key)
         end
         tween(1, self, {fade=1}, "inOutQuad", function()
             setState(states.menu)
-            states.game:reset()
         end)
     end
     if key == "backspace" then
