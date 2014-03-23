@@ -81,7 +81,7 @@ function love.load()
     states.menu = MenuState:new()
     states.gameover = GameOverState:new()
     
-    currentState = states.gameover
+    currentState = states.game
     
     highscore.set("highscore", 3, "nobody", 0)
 end
