@@ -29,7 +29,7 @@ function Indicators:draw()
     -- packages left 
     for i = 0, plane.quantity-1 do
         local r = math.sin(time*2*math.pi+2*i) * 0.1
-        love.graphics.draw(images.package, self.position.x - 45 + (i%4) * 30, self.position.y + self.size * 0.8 + math.floor(i/4) * 20, 
+        love.graphics.draw(images.package, self.position.x - 29 + (i%3) * 30, self.position.y + self.size * 0.8 + math.floor(i/3) * 20, 
             r, 0.25, 0.25, images.package:getWidth()/2, images.package:getHeight()/2)
     end
 

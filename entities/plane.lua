@@ -15,7 +15,7 @@ function Plane:initialize(x, y)
     self.rotationspeed = 0.9
     self.fuel = 1
     self.fuelconsumption = 1
-    self.quantity = 12
+    self.quantity = 9
     self.altitude = 1
     self.landing = false
     self.isChrashing = false
