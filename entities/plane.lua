@@ -14,6 +14,7 @@ function Plane:initialize(x, y)
     self.altitude = 1
     self.landing = false
     self.isChrashing = false
+    self.crashed = false
     self.size = 1
 
     -- Trudel-Winkel, wird nicht in Richtung eingerechnet aber zum Drehen der Grafik verwendet
@@ -60,8 +61,12 @@ function Plane:draw()
     self.smokeTrailLeft:draw()
     self.smokeTrailRight:draw()
 
-    love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction + self.spinAngle, 
+    if self.crashed == false then
+        love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction + self.spinAngle, 
         self.size, self.size, images.plane:getWidth()/2, images.plane:getHeight()/2)
+    else
+        love.graphics.draw(images.crater, self.position.x, self.position.y, 0, 0.1, 0.1, images.crater:getWidth()/2, images.crater:getHeight()/2)        
+    end
 end
 
 function Plane:dropPackage()
@@ -79,8 +84,12 @@ function Plane:crash()
     tween(3, self, {rotationspeed = 10}, "inCirc")
     tween(3, self, {speed = 0}, "inCirc", function() 
         self.state:add(Explosion:new(self.position:clone()))
+        self.crashed = true
+        Plane.z = 1
     end)
+    
     highscore.add("Hans-Peter", self.state.score)
+    
 end
 
 function Plane:land()

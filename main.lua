@@ -43,6 +43,7 @@ function love.load()
     images.smoke = love.graphics.newImage("graphics/smoke.png")
     images.smokeRing = love.graphics.newImage("graphics/smokeRing.png")
     images.circle = love.graphics.newImage("graphics/circle.png")
+    images.crater = love.graphics.newImage("graphics/Crater.png")
 
     fonts = {}
     fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)
