@@ -1,4 +1,4 @@
-local class = require 'middleclass'
+--[[local class = require 'middleclass'
 require "entity"
 
 Tornado = class ("Tornado", Entity)
@@ -15,4 +15,4 @@ function Tornado:draw()
     for k, v in pairs(self.tornado) do
         love.graphics.circle("fill", self.position.x, self.position.y, 50)        
     end
-end
+end ]]--
