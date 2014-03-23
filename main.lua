@@ -9,6 +9,7 @@ require "entities/ground"
 require "entities/airport"
 require "entities/particles"
 require "entities/target"
+require "entities/text"
 require "indicators"
 require "minimap"
 
@@ -28,6 +29,11 @@ end
 function love.load()
     time = 0
     math.randomseed(os.time())
+    if love.window.getPixelScale then
+        PIXELSCALE = love.window.getPixelScale()
+    else
+        PIXELSCALE = 1
+    end
 
     images = {}
     images.plane = love.graphics.newImage("graphics/Plane.png")
@@ -43,6 +49,7 @@ function love.load()
     images.smoke = love.graphics.newImage("graphics/smoke.png")
     images.smokeRing = love.graphics.newImage("graphics/smokeRing.png")
     images.circle = love.graphics.newImage("graphics/circle.png")
+    images.crater = love.graphics.newImage("graphics/Crater.png")
 
     fonts = {}
     fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)
@@ -73,5 +80,17 @@ function love.keypressed(key)
         love.event.push("quit")
     else
         currentState:keypressed(key)
+    end
+end
+
+function love.mousepressed(x, y, b)
+    currentState:mousepressed(x, y, b)
+end
+
+function love.touchpressed(id, x, y, p)
+    x = x * love.graphics.getWidth()
+    y = y * love.graphics.getHeight()
+    if id ~= 0 then
+        currentState:mousepressed(x, y, "l")
     end
 end
