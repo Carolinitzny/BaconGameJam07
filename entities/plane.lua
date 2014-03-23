@@ -114,7 +114,11 @@ function Plane:land()
     self.landing = true
     self.rotationspeed = 0
     self.fuelconsumption = 0
+    source = love.audio.newSource(sounds.landing)
+    source:play()
     tween(1, self, {altitude = 0}, "inOutQuad")
+    source = love.audio.newSource(sounds.liftoff)
+    source:play()
     tween(1.5, self, {speed = 0}, "inQuad", function()
         self:refuel()
     end)
