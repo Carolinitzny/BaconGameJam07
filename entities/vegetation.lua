@@ -8,7 +8,7 @@ function Vegetation:initialize(x, y)
     self.vegetation = {}
     local type = math.random()
     
-    if type > 0.2 then
+    if type > 0.001 then
         local count = math.random(1, 5)
         for k= 1, count do
 

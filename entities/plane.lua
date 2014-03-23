@@ -51,17 +51,24 @@ end
 function Plane:update(dt)
     if math.random() < 1/30*dt and not self.motorProblem then 
         self.motorProblem = true
-        tween(math.random()*2 + 1,{},{},nil,function()
+        tween(math.random()*2,{},{},nil,function()
             self.motorProblem = false
         end)
     end
-    self.stutter = (time%0.15)< 0.1 and self.motorProblem
+    self.stutter = (time%0.18)< 0.1 and self.motorProblem
     if self.stutter then
         self.sound:pause()
-        
+        self.smokeTrailLeft.particles:pause()
+        self.smokeTrailRight.particles:pause()
+        self.smokeTrailLeft2.particles:start()
+        self.smokeTrailRight2.particles:start() 
     else
         if not self.landing and not self.isCrashing and not self.crashed then
             self.sound:play()
+            self.smokeTrailLeft2.particles:pause()         
+            self.smokeTrailRight2.particles:pause()
+            self.smokeTrailLeft.particles:start()
+            self.smokeTrailRight.particles:start()         
         end
           
     end    
