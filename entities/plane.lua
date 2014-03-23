@@ -104,9 +104,10 @@ function Plane:crash()
         self.state:add(Explosion:new(self.position:clone()))
         self.crashed = true
         Plane.z = 1
+        tween(2, {}, {}, nil, function()
+            self.state:fadeOver(states.gameover)
+        end)
     end)
-    
-    highscore.add("Hans-Peter", self.state.score)
     
 end
 

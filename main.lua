@@ -16,6 +16,7 @@ require "minimap"
 require "state"
 require "states/gamestate"
 require "states/menustate"
+require "states/gameoverstate"
 
 function table.removeValue(t, value)
     for k,v in pairs(t) do
@@ -60,11 +61,13 @@ function love.load()
     fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)
     fonts.writing30 = love.graphics.newFont("TMJ.ttf", 30)
     fonts.writing50 = love.graphics.newFont("TMJ.ttf", 50)
+    
     states = {}
     states.game = GameState:new()
     states.menu = MenuState:new()
-
-    currentState = states.game
+    states.gameover = GameOverState:new()
+    
+    currentState = states.gameover
     
     highscore.set("highscore", 3, "nobody", 0)
 end
@@ -87,6 +90,10 @@ function love.keypressed(key)
     else
         currentState:keypressed(key)
     end
+end
+
+function love.textinput(char)
+    currentState:textinput(char)
 end
 
 function love.mousepressed(x, y, b)
