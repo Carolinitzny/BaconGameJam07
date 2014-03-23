@@ -22,6 +22,7 @@ require "state"
 require "states/gamestate"
 require "states/menustate"
 require "states/gameoverstate"
+require "states/titlestate"
 
 function setState(state)
     currentState = state
@@ -80,13 +81,15 @@ function love.load()
     fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)
     fonts.writing30 = love.graphics.newFont("TMJ.ttf", 30)
     fonts.writing50 = love.graphics.newFont("TMJ.ttf", 50)
+    fonts.title = love.graphics.newFont("TMJ.ttf", 80)
     
     states = {}
     states.game = GameState:new()
     states.menu = MenuState:new()
     states.gameover = GameOverState:new()
+    states.title = TitleState:new()
     
-    currentState = states.game
+    currentState = states.title
     
     highscore.set("highscore", 3, "nobody", 0)
 end
