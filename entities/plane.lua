@@ -43,8 +43,8 @@ function Plane:initialize(x, y)
     -- particles
     self.smokeTrailLeft = SmokeTrail:new(self.position, self, 255, 255, 255)
     self.smokeTrailRight = SmokeTrail:new(self.position, self, 255, 255, 255)
-    self.smokeTrailLeft2 = SmokeTrail:new(self.position, self, 200, 200, 200)
-    self.smokeTrailRight2 = SmokeTrail:new(self.position, self, 200, 200, 200)
+    self.smokeTrailLeft2 = SmokeTrail:new(self.position, self, 50, 50, 50)
+    self.smokeTrailRight2 = SmokeTrail:new(self.position, self, 50, 50, 50)
 
 end 
 
@@ -58,8 +58,6 @@ function Plane:update(dt)
     self.stutter = (time%0.18)< 0.1 and self.motorProblem
     if self.stutter then
         self.sound:pause()
-        self.smokeTrailLeft.particles:pause()
-        self.smokeTrailRight.particles:pause()
         self.smokeTrailLeft2.particles:start()
         self.smokeTrailRight2.particles:start() 
     else
@@ -67,8 +65,6 @@ function Plane:update(dt)
             self.sound:play()
             self.smokeTrailLeft2.particles:pause()         
             self.smokeTrailRight2.particles:pause()
-            self.smokeTrailLeft.particles:start()
-            self.smokeTrailRight.particles:start()         
         end
           
     end    
