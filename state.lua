@@ -43,7 +43,11 @@ end
 
 function State:drawWorld()
     table.sort(self.world, function(a, b)
-        return a.z < b.z
+        if a.z == b.z and a.position and b.position then
+            return a.position.y < b.position.y
+        else
+            return a.z < b.z
+        end
     end)
     for k,v in pairs(self.world) do
         v:draw()
