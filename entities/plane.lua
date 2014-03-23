@@ -26,6 +26,7 @@ function Plane:initialize(x, y, dummy)
     self.size = 1
     self.stutter = false
     self.motorProblem = false
+    self.firstLanding = true
 
     self.sound = love.audio.newSource(sounds.flight)
     self.sound:setLooping(true)
@@ -181,7 +182,6 @@ function Plane:crash()
             self.state:fadeOver(states.gameover)
         end)
     end)
-    
 end
 
 function Plane:land(airport)
@@ -205,7 +205,7 @@ function Plane:land(airport)
     tween(1.5, self, {speed = 0}, "inExpo", function()
         self:refuel()
     end)
-    
+    self.firstLanding = false
 end
 
 function Plane:refuel()
