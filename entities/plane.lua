@@ -139,7 +139,7 @@ end
 function Plane:refuel()
     source = love.audio.newSource(sounds.refuel)
     source:play()
-    tween (2, self, {quantity = 12})
+    tween (2, self, {quantity = 9})
     tween(1.5, self, {direction = self.direction + math.pi})
     tween(2, self, {fuel = 1}, "inOutQuad", function()
         self:liftoff()
