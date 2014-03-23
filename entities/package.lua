@@ -32,11 +32,14 @@ function Package:landed()
     for k, v in pairs(self.state.world) do
         if v:isInstanceOf(Target) then
             if (self.position - v.position):len() < 30 then
-                self.state:addScore(v.village.count)
+                if math.random(1,20) == 1 then
+                    self.state:addScore(-1)
+                    self.state:add(Text(v.position, "-1", {255, 0, 0}))
+                else
+                    self.state:addScore(v.village.count)
+                    self.state:add(Text(v.position, v.village.count, {0, 255, 0}))
+                end
                 self.state:delete(v)
-                    if math.random(1,20) == 1 then
-                        self.state:addScore(-1)
-                    end
             end
             
         end  
