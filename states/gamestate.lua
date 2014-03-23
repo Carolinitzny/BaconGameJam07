@@ -7,6 +7,7 @@ function GameState:initialize()
     self.offset = Vector:new()
     self.generated = {left = 0, right = 0, top = 0, bottom = 0}
     self:reset()
+    self.fade = 0
 end
 
 function GameState:reset()
@@ -54,11 +55,15 @@ function GameState:update(dt)
 end
 
 function GameState:draw()
+    love.graphics.setColor(255, 255, 255)
     love.graphics.push()
     love.graphics.translate(-self.offset.x, -self.offset.y)
     self:drawWorld()
     love.graphics.pop()
     self:drawUI()
+
+    love.graphics.setColor(255, 255, 255, self.fade * 255)
+    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
 
 function GameState:isVillageNearby(pos, threshold)
@@ -115,7 +120,7 @@ function GameState:keypressed(key)
     if key == " " then
         self.plane:dropPackage()
     elseif key == "tab" then
-        currentState = states.menu
+        self:fadeOver(states.menu)
     end
 end
 
@@ -128,4 +133,15 @@ function GameState:mousepressed(x, y, b)
     if (p - Vector:new(0.5, 0.5)):len() < 0.1 then
         self.plane:dropPackage()
     end
+end
+
+function GameState:fadeOver(state)
+    tween(1, self, {fade=1}, "inOutQuad", function()
+        setState(state)
+    end)
+end
+
+function GameState:onEnter()
+    self.fade = 1
+    tween(1, self, {fade=0}, "inOutQuad")
 end

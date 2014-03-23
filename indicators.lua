@@ -34,9 +34,11 @@ function Indicators:draw()
     end
 
     -- score
-    local text = "People fed: " .. score
+    local text = "People fed"
     love.graphics.setColor(0, 0, 0)
-    love.graphics.setFont(fonts.normal)
+    love.graphics.setFont(fonts.writing30)
     love.graphics.print(text, self.position.x - love.graphics.getFont():getWidth(text) / 2, self.position.y + self.size * 1.5)
+    love.graphics.setFont(fonts.writing50)
+    love.graphics.print(score, self.position.x - love.graphics.getFont():getWidth(score) / 2, self.position.y + self.size * 1.5 + 30)
     love.graphics.setColor(255, 255, 255)
 end    

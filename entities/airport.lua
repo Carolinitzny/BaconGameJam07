@@ -21,7 +21,7 @@ function Airport:update(dt)
         local plane = self.state.plane
         local distance = (plane.position - self.position):len()
         local angleDifference = math.abs(((plane.direction - self.orientation) + math.pi) % (2 * math.pi) - math.pi)
-        if distance < 20 and angleDifference < 0.2 and not plane.landing and not plane.isCrashing then
+        if distance < 20 and angleDifference < 0.2 and not plane.landing and not plane.isChrashing then
             if plane.speed <= 1.2 then
                 plane:land()
             else

@@ -15,7 +15,7 @@ function Village:initialize(x,y)
         house.image = images.houses[math.random(#images.houses)]
         house.x = direc.x
         house.y = direc.y
-        house.people = math.random(2, 10)
+        house.people = math.random(4, 8)
         table.insert(self.houses, house)
         self.people = self.people + house.people
     end 
