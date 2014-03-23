@@ -35,18 +35,6 @@ function GameOverState:keypressed(key)
     if key == "return" and self.name then
         highscore.add(self.name, states.game.score)
         tween(1, self, {fade=1}, "inOutQuad", function()
-            plane.speed = 1
-            plane.direction = 0
-            plane.directionChange = 0
-            plane.rotationspeed = 0.9
-            plane.fuel = 1
-            plane.fuelconsumption = 1
-            plane.quantity = 9
-            plane.altitude = 1
-            plane.landing = false
-            plane.isChrashing = false
-            plane.crashed = false
-            plane.size = 1
             setState(states.menu)
         end)
     end
