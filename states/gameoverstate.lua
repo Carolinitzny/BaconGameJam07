@@ -55,4 +55,6 @@ function GameOverState:onEnter()
     self.highscore = false
     self.fade = 1
     tween(1, self, {fade=0}, "inOutQuad")
+    self.music = love.audio.newSource("sound/theme.ogg", "stream")
+    self.music:play()
 end

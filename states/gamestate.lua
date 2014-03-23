@@ -4,7 +4,7 @@ require "state"
 GameState = class("GameState", State)
 function GameState:initialize()
     State.initialize(self)
-    self:reset()
+    -- self:reset()
     self.fade = 0
 end
 
@@ -158,7 +158,7 @@ function GameState:keypressed(key)
     if key == " " then
         self.plane:dropPackage()
     elseif key == "tab" then
-        self:fadeOver(states.menu)
+        self:fadeOver(states.title)
     end
 end
 
