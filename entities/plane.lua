@@ -1,7 +1,7 @@
 local class = require 'middleclass'
 require "entity"
 
-SPEED_FACTOR = 140
+SPEED_FACTOR = 240
 MAX_SPEED = 2
 FUEL_CONSUMPTION = 0.025
 
@@ -14,7 +14,7 @@ function Plane:initialize(x, y)
     self.speed = 1
     self.direction = 0
     self.directionChange = 0
-    self.rotationspeed = 0.9
+    self.rotationspeed = 2
     self.fuel = 1
     self.fuelconsumption = 1
     self.quantity = 9
@@ -23,6 +23,8 @@ function Plane:initialize(x, y)
     self.isCrashing = false
     self.crashed = false
     self.size = 1
+    self.stutter = false
+    self.motorProblem = false
 
     self.landing = true
     self.altitude = 0
@@ -34,17 +36,35 @@ function Plane:initialize(x, y)
     self.sound:setLooping(true)
     -- self.sound:play()
 
-    -- Trudel-Winkel, wird nicht in Richtung eingerechnet aber zum Drehen der Grafik verwendet
+    -- Trudel-Winkel, wird nicht in Richtung eingerechnet, aber zum Drehen der Grafik verwendet
     self.spinAngle = 0
     self.spinAngleSpeed = 0
 
     -- particles
-    self.smokeTrailLeft = SmokeTrail:new(self.position, self)
-    self.smokeTrailRight = SmokeTrail:new(self.position, self)
+    self.smokeTrailLeft = SmokeTrail:new(self.position, self, 255, 255, 255)
+    self.smokeTrailRight = SmokeTrail:new(self.position, self, 255, 255, 255)
+    self.smokeTrailLeft2 = SmokeTrail:new(self.position, self, 200, 200, 200)
+    self.smokeTrailRight2 = SmokeTrail:new(self.position, self, 200, 200, 200)
+
 end 
 
 function Plane:update(dt)
-       
+    if math.random() < 1/30*dt and not self.motorProblem then 
+        self.motorProblem = true
+        tween(math.random()*2 + 1,{},{},nil,function()
+            self.motorProblem = false
+        end)
+    end
+    self.stutter = (time%0.15)< 0.1 and self.motorProblem
+    if self.stutter then
+        self.sound:pause()
+        
+    else
+        if not self.landing and not self.isCrashing and not self.crashed then
+            self.sound:play()
+        end
+          
+    end    
     if not self.isCrashing then
         local dir = 0
         local dirChangeSpeed = 5
@@ -74,7 +94,13 @@ function Plane:update(dt)
 
     local dir = Vector:new(0, -1)
     dir:rotate(self.direction)
-    dir = dir * dt * self.speed * SPEED_FACTOR
+    dir = dir * dt * self.speed * SPEED_FACTOR 
+
+    -- wind
+    if not (self.isCrashing or self.landing or self.crashed) then
+        dir = dir + self.state:getWindVector(dt) * 0.2
+    end
+
     self.position = self.position + dir
     self.fuel = math.max(0, self.fuel - self.fuelconsumption * dt * FUEL_CONSUMPTION * math.pow(self.speed, 1.3))
     if self.fuel <= 0 then
@@ -85,14 +111,20 @@ function Plane:update(dt)
 
     self.smokeTrailLeft.position = self.position + Vector:new(-40*self.size, 0):rotated(self.direction + self.spinAngle)
     self.smokeTrailRight.position = self.position + Vector:new( 40*self.size, 0):rotated(self.direction + self.spinAngle)
+    self.smokeTrailLeft2.position = self.position + Vector:new(-40*self.size, 0):rotated(self.direction + self.spinAngle)
+    self.smokeTrailRight2.position = self.position + Vector:new( 40*self.size, 0):rotated(self.direction + self.spinAngle)
+    
     self.smokeTrailLeft:update(dt)
     self.smokeTrailRight:update(dt)
+    self.smokeTrailLeft2:update(dt)
+    self.smokeTrailRight2:update(dt)
 end
 
 function Plane:draw()
     self.smokeTrailLeft:draw()
     self.smokeTrailRight:draw()
-
+    self.smokeTrailLeft2:draw()
+    self.smokeTrailRight2:draw()
     if self.crashed == false then
         love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction + self.spinAngle, 
         self.size, self.size, images.plane:getWidth()/2, images.plane:getHeight()/2)
@@ -111,7 +143,6 @@ function Plane:dropPackage()
 end
 
 function Plane:crash()
-    
     if self.isCrashing then return end
     self.isCrashing = true
     self.sound:pause()
@@ -145,7 +176,8 @@ function Plane:land(airport)
     end
 
     tween(1, self, {direction = dir}, "inOutQuad")
-    tween(1.3, self, {altitude = 0}, "inOutQuad")
+    tween(1.2, self, {altitude = 0}, "inOutQuad")
+    self.speed = 0.6
     tween(1.5, self, {speed = 0}, "inExpo", function()
         self:refuel()
     end)
@@ -165,7 +197,7 @@ end
 function Plane:liftoff()
     source = love.audio.newSource(sounds.liftoff)
     source:play()
-    self.rotationspeed = 0.9
+    self.rotationspeed = 2
     self.fuelconsumption = 1
     tween(1, self, {speed = 1}, "inQuad")
     tween(1, {}, {}, nil, function() 
