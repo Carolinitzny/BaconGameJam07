@@ -97,7 +97,6 @@ function GameState:generateVillages(left, right, top, bottom)
    local density = 0.1/(800*600)
     local area = math.abs((right - left)* (bottom - top))
     local count = math.ceil(area * density)
-    print("Generating " .. count .. " airports")
     for k = 1, count do
         for l = 1, 50 do
             local pos = Vector:new(math.random(left,right), math.random(top, bottom))

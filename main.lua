@@ -9,6 +9,7 @@ require "entities/ground"
 require "entities/airport"
 require "entities/particles"
 require "entities/target"
+require "entities/text"
 require "indicators"
 require "minimap"
 
