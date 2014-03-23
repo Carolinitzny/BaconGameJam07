@@ -4,7 +4,7 @@ require "state"
 GameState = class("GameState", State)
 function GameState:initialize()
     State.initialize(self)
-    self:reset()
+    -- self:reset()
     self.fade = 0
 end
 
@@ -145,7 +145,7 @@ function GameState:generateWorld(left, right, top, bottom)
     end
     
     --tornado
-    local density = 0.5/(800*600)
+    local density = 0.2/(800*600)
     local count = area*density
     for k = 1, count do
         local pos = Vector:new(math.random(left,right), math.random(top, bottom))
@@ -158,7 +158,7 @@ function GameState:keypressed(key)
     if key == " " then
         self.plane:dropPackage()
     elseif key == "tab" then
-        self:fadeOver(states.menu)
+        self:fadeOver(states.title)
     end
 end
 

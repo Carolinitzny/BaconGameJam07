@@ -10,7 +10,7 @@ function Village:initialize(x,y)
     self.houses = {}
     for k = 1, self.count do
         local house = {}
-        local direc = Vector:new(math.random(30,60), 0)
+        local direc = Vector:new(math.random(45, 70), 0)
         direc:rotate(k*(math.pi*2)/self.count)
         house.image = images.houses[math.random(#images.houses)]
         house.x = direc.x
@@ -23,9 +23,11 @@ function Village:initialize(x,y)
         local church = {}   
         church.image = images.church
         church.x = 0
-        church.y = 0 
+        church.y = 10 
         table.insert(self.houses, church)    
     end
+
+    table.sort(self.houses, function(a, b) return a.y < b.y end)
 end
 
 function Village:draw()
@@ -35,7 +37,7 @@ function Village:draw()
     love.graphics.setColor(255, 255, 255)
 
     for k, v in pairs(self.houses) do
-        local s = 0.5
+        local s = 0.6
         local image =v.image
         love.graphics.draw(image,v.x + self.position.x, v.y + self.position.y,0,s,s,
             image:getWidth()/2, image:getHeight()/2)

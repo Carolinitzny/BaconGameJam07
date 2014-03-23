@@ -7,14 +7,15 @@ FUEL_CONSUMPTION = 0.025
 
 Plane = class ("Plane", Entity)
 Plane.z = 6
-function Plane:initialize(x, y)
+function Plane:initialize(x, y, dummy)
+    self.dummy = dummy
     self.z = 6
     self.normalFlight = true
     self.position = Vector:new(x,y)
     self.speed = 1
     self.direction = 0
     self.directionChange = 0
-    self.rotationspeed = 2
+    self.rotationspeed = 0
     self.fuel = 1
     self.fuelconsumption = 1
     self.quantity = 9
@@ -27,14 +28,11 @@ function Plane:initialize(x, y)
     self.motorProblem = false
     self.firstLanding = true
 
-    self.landing = true
-    self.altitude = 0
-    self.fuelconsumption = 0
-    self.speed = 0
-
     self.sound = love.audio.newSource(sounds.flight)
     self.sound:setLooping(true)
-    -- self.sound:play()
+    if self.dummy then
+        self.sound:play()
+    end
 
     -- Trudel-Winkel, wird nicht in Richtung eingerechnet, aber zum Drehen der Grafik verwendet
     self.spinAngle = 0
@@ -48,72 +46,92 @@ function Plane:initialize(x, y)
     self.smokeTrailLeft2.particles:pause()
     self.smokeTrailRight2.particles:pause()
 
-    self:liftoff()
+    if not dummy then
+        -- liftoff on start
+        self.landing = true
+        self.altitude = 0
+        self.fuelconsumption = 0
+        self.speed = 0
+        tween(2, {}, {}, nil, function()
+            self:liftoff()
+        end)
+    end
 end 
 
 function Plane:update(dt)
-    if math.random() < 1/30*dt and not self.motorProblem then 
-        self.motorProblem = true
-        tween(math.random()*2,{},{},nil,function()
-            self.motorProblem = false
-        end)
-    end
-    self.stutter = ((time%0.18)< 0.1 and self.motorProblem) or self.isCrashing
-    if self.stutter then
-        self.sound:pause()
-        self.smokeTrailLeft2.particles:start()
-        self.smokeTrailRight2.particles:start() 
-    else
-        if not self.landing and not self.isCrashing and not self.crashed then
-            self.sound:play()
-            self.smokeTrailLeft2.particles:pause()         
-            self.smokeTrailRight2.particles:pause()
+    if not self.dummy then
+        -- Motor problems
+        if math.random() < 1/30*dt and not self.motorProblem then 
+            self.motorProblem = true
+            tween(math.random()*2,{},{},nil,function()
+                self.motorProblem = false
+            end)
         end
-          
-    end    
-    if not self.isCrashing then
-        local dir = 0
-        local dirChangeSpeed = 5
+        self.stutter = ((time%0.18)< 0.1 and self.motorProblem) or self.isCrashing
+        if self.stutter then
+            self.sound:pause()
+            self.smokeTrailLeft2.particles:start()
+            self.smokeTrailRight2.particles:start() 
+        else
+            if not self.landing and not self.isCrashing and not self.crashed then
+                self.sound:play()
+                self.smokeTrailLeft2.particles:pause()         
+                self.smokeTrailRight2.particles:pause()
+            end
+              
+        end    
 
-        local mx, my = love.mouse.getPosition()
-        local mp = Vector:new(mx / love.graphics.getWidth(), my / love.graphics.getHeight())
-        local md = love.mouse.isDown("l")
+        -- Movement
+        if not self.isCrashing then
+            local dir = 0
+            local dirChangeSpeed = 5
 
-        if love.keyboard.isDown("left") or love.keyboard.isDown("a") or (md and mp.x < 0.3) then dir = -1 end
-        if love.keyboard.isDown("right") or love.keyboard.isDown("d") or (md and mp.x > 0.7) then dir = 1 end  
-        if not dir then dirChangeSpeed = 20 end
-        self.directionChange = self.directionChange * (1 - dt*dirChangeSpeed) + dir * dt * dirChangeSpeed
+            local mx, my = love.mouse.getPosition()
+            local mp = Vector:new(mx / love.graphics.getWidth(), my / love.graphics.getHeight())
+            local md = love.mouse.isDown("l")
 
-        self.direction = self.direction + self.rotationspeed*dt*self.directionChange
-        self.spinAngleSpeed = self.directionChange
+            if love.keyboard.isDown("left") or love.keyboard.isDown("a") or (md and mp.x < 0.3) then dir = -1 end
+            if love.keyboard.isDown("right") or love.keyboard.isDown("d") or (md and mp.x > 0.7) then dir = 1 end  
+            if not dir then dirChangeSpeed = 20 end
+            self.directionChange = self.directionChange * (1 - dt*dirChangeSpeed) + dir * dt * dirChangeSpeed
 
-        if not self.landing then
-            local ds = 0
-            local mc = md and mp.x > 0.3 and mp.x < 0.7
-            if love.keyboard.isDown("w") or love.keyboard.isDown("up") or (mc and mp.y < 0.3) then ds = 1 end
-            if love.keyboard.isDown("s") or love.keyboard.isDown("down") or (mc and mp.y > 0.7) then ds = -1 end
-            self.speed = math.max(1, math.min(MAX_SPEED, self.speed + ds * dt))
+            self.direction = self.direction + self.rotationspeed*dt*self.directionChange
+            self.spinAngleSpeed = self.directionChange
+
+            if not self.landing then
+                local ds = 0
+                local mc = md and mp.x > 0.3 and mp.x < 0.7
+                if love.keyboard.isDown("w") or love.keyboard.isDown("up") or (mc and mp.y < 0.3) then ds = 1 end
+                if love.keyboard.isDown("s") or love.keyboard.isDown("down") or (mc and mp.y > 0.7) then ds = -1 end
+                self.speed = math.max(1, math.min(MAX_SPEED, self.speed + ds * dt))
+            end
+        else
+            self.spinAngle = self.spinAngle + self.spinAngleSpeed * dt
         end
-    else
-        self.spinAngle = self.spinAngle + self.spinAngleSpeed * dt
+
+        local dir = Vector:new(0, -1)
+        dir:rotate(self.direction)
+        dir = dir * dt * self.speed * SPEED_FACTOR 
+
+        -- wind
+        if not (self.isCrashing or self.landing or self.crashed) then
+            dir = dir + self.state:getWindVector(dt) * 100
+        end
+
+        self.position = self.position + dir
+        self.fuel = math.max(0, self.fuel - self.fuelconsumption * dt * FUEL_CONSUMPTION * math.pow(self.speed, 1.3))
+        if self.fuel <= 0 then
+            self:crash()
+        end
+
+        self.size = 0.2 + 0.8 * self.altitude
+    else -- self.dummy
+        self.direction = self.direction + self.directionChange * dt
+        local dir = Vector:new(0, -1)
+        dir:rotate(self.direction)
+        dir = dir * dt * self.speed * SPEED_FACTOR 
+        self.position = self.position + dir
     end
-
-    local dir = Vector:new(0, -1)
-    dir:rotate(self.direction)
-    dir = dir * dt * self.speed * SPEED_FACTOR 
-
-    -- wind
-    if not (self.isCrashing or self.landing or self.crashed) then
-        dir = dir + self.state:getWindVector(dt) * 100
-    end
-
-    self.position = self.position + dir
-    self.fuel = math.max(0, self.fuel - self.fuelconsumption * dt * FUEL_CONSUMPTION * math.pow(self.speed, 1.3))
-    if self.fuel <= 0 then
-        self:crash()
-    end
-
-    self.size = 0.2 + 0.8 * self.altitude
 
     self.smokeTrailLeft.position   = self.position + Vector:new(-35*self.size, 0):rotated(self.direction + self.spinAngle)
     self.smokeTrailRight.position  = self.position + Vector:new( 35*self.size, 0):rotated(self.direction + self.spinAngle)
@@ -131,7 +149,7 @@ function Plane:draw()
     self.smokeTrailRight:draw()
     self.smokeTrailLeft2:draw()
     self.smokeTrailRight2:draw()
-    if self.crashed == false then
+    if not self.crashed then
         love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction + self.spinAngle, 
         self.size, self.size, images.plane:getWidth()/2, images.plane:getHeight()/2)
     else
@@ -154,6 +172,7 @@ function Plane:crash()
     self.sound:pause()
     source = love.audio.newSource(sounds.crashing)
     source:play()
+
     tween(2.6, self, {altitude = 0}, "inQuad")
     tween(2.6, self, {speed = 0}, "inCirc", function() 
         self.state:add(Explosion:new(self.position:clone()))
@@ -180,7 +199,7 @@ function Plane:land(airport)
         dir = dir + pi2
     end
 
-    tween(1, self, {direction = dir}, "inOutQuad")
+    tween(0.5, self, {direction = dir}, "inOutQuad")
     tween(1.2, self, {altitude = 0}, "inOutQuad")
     self.speed = 0.6
     tween(1.5, self, {speed = 0}, "inExpo", function()
@@ -202,11 +221,10 @@ end
 function Plane:liftoff()
     source = love.audio.newSource(sounds.liftoff)
     source:play()
-    self.rotationspeed = 2
     self.fuelconsumption = 1
     self.smokeTrailLeft2.particles:pause()         
     self.smokeTrailRight2.particles:pause()
-    tween(1, self, {speed = 1}, "inQuad")
+    tween(1, self, {speed = 1, rotationspeed=2}, "inQuad")
     tween(1, {}, {}, nil, function() 
         tween(3, self, {altitude = 1}, "inOutQuad", function() 
             self.landing = false
