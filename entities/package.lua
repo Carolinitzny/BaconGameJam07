@@ -36,7 +36,7 @@ function Package:landed()
                     self.state:add(Text(v.position - Vector:new(0, 50), "1 casualty", {255, 0, 0}, fonts.writing30))
                 end
                 self.state:addScore(v.village.people)
-                self.state:add(Text(v.position, v.village.people .. " fed", {0, 255, 0}, fonts.writing50))
+                self.state:add(Text(v.position, v.village.people .. " fed", {0, 200, 0}, fonts.writing50))
                 self.state:delete(v)
                 hit = true
             end
