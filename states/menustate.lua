@@ -44,6 +44,7 @@ end
 
 function MenuState:keypressed(key)
     tween(1, self, {fade=1}, "inOutQuad", function()
+        states.game:reset()
         setState(states.game)
     end)
 end
