@@ -9,7 +9,6 @@ function Indicators:update(dt)
 end
 
 function Indicators:draw()    
-    local score = self.state.score
     local plane = self.state.plane
     local angle = plane.fuel*((3/2)*math.pi)
 
@@ -38,11 +37,24 @@ function Indicators:draw()
     end
 
     -- score
-    local text = "People fed"
+    local offset = 40
+    local text = "People fed:"
     love.graphics.setColor(0, 0, 0)
     love.graphics.setFont(fonts.writing30)
-    love.graphics.print(text, self.position.x - love.graphics.getFont():getWidth(text) / 2, self.position.y + self.size * 1.5)
+    love.graphics.print(text, self.position.x - love.graphics.getFont():getWidth(text) + offset, self.position.y + self.size * 1.5)
+    love.graphics.setColor(0, 200, 0)
     love.graphics.setFont(fonts.writing50)
-    love.graphics.print(score, self.position.x - love.graphics.getFont():getWidth(score) / 2, self.position.y + self.size * 1.5 + 30)
+    local score = self.state.positiveScore
+    love.graphics.print(score, self.position.x + offset + 10, self.position.y + self.size * 1.5 - 10)
+
+    local text = "People killed:"
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.setFont(fonts.writing30)
+    love.graphics.print(text, self.position.x - love.graphics.getFont():getWidth(text) + offset, self.position.y + self.size * 2.0)
+    love.graphics.setColor(255, 0, 0)
+    love.graphics.setFont(fonts.writing50)
+    local score = self.state.negativeScore
+    love.graphics.print(score, self.position.x + offset + 10, self.position.y + self.size * 2.0 - 10)
+
     love.graphics.setColor(255, 255, 255)
 end    

@@ -13,7 +13,11 @@ function GameState:reset()
     self.world = {}
     self.offset = Vector:new()
     self.generated = {left = 0, right = 0, top = 0, bottom = 0}
+
     self.score = 0
+    self.positiveScore = 0
+    self.negativeScore = 0
+
     time = 0
 
     self.windDirection = 0
@@ -164,6 +168,11 @@ end
 
 function GameState:addScore(s)
     self.score = self.score + s
+    if s > 0 then
+        self.positiveScore = self.positiveScore + s
+    else
+        self.negativeScore = self.negativeScore - s
+    end
 end
 
 function GameState:mousepressed(x, y, b) 
