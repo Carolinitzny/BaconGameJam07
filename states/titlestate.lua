@@ -13,6 +13,7 @@ function TitleState:initialize()
     self:add(self.ground)
 
     self.musicCountdown = 0
+    self.musicVolume = 1
 end
 
 function TitleState:update(dt)
@@ -22,6 +23,8 @@ function TitleState:update(dt)
         self.music:play()
         self.musicCountdown = 30
     end
+    self.music:setVolume(self.musicVolume)
+    self.music:play()
 
     self:updateEntities(dt)
     if time > 1 then
@@ -55,7 +58,10 @@ function TitleState:draw()
 end
 
 function TitleState:keypressed(key)
-    tween(0.2, self, {fade=1}, "inOutQuad", function()
+    tween(1, self, {musicVolume=0}, nil, function()
+        self.music:stop()
+    end)
+    tween(1, self, {fade=1}, "inOutQuad", function()
         self.plane.sound:stop()
         states.game:reset()
         setState(states.game)

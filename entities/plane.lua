@@ -15,7 +15,7 @@ function Plane:initialize(x, y, dummy)
     self.speed = 1
     self.direction = 0
     self.directionChange = 0
-    self.rotationspeed = 2
+    self.rotationspeed = 0
     self.fuel = 1
     self.fuelconsumption = 1
     self.quantity = 9
@@ -51,7 +51,9 @@ function Plane:initialize(x, y, dummy)
         self.altitude = 0
         self.fuelconsumption = 0
         self.speed = 0
-        self:liftoff()
+        tween(2, {}, {}, nil, function()
+            self:liftoff()
+        end)
     end
 end 
 
@@ -219,11 +221,10 @@ end
 function Plane:liftoff()
     source = love.audio.newSource(sounds.liftoff)
     source:play()
-    self.rotationspeed = 2
     self.fuelconsumption = 1
     self.smokeTrailLeft2.particles:pause()         
     self.smokeTrailRight2.particles:pause()
-    tween(1, self, {speed = 1}, "inQuad")
+    tween(1, self, {speed = 1, rotationspeed=2}, "inQuad")
     tween(1, {}, {}, nil, function() 
         tween(3, self, {altitude = 1}, "inOutQuad", function() 
             self.landing = false
