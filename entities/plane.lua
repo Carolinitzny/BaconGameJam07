@@ -180,7 +180,7 @@ function Plane:land(airport)
         dir = dir + pi2
     end
 
-    tween(1, self, {direction = dir}, "inOutQuad")
+    tween(0.5, self, {direction = dir}, "inOutQuad")
     tween(1.2, self, {altitude = 0}, "inOutQuad")
     self.speed = 0.6
     tween(1.5, self, {speed = 0}, "inExpo", function()
