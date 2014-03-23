@@ -122,3 +122,10 @@ end
 function GameState:addScore(s)
     self.score = self.score + s
 end
+
+function GameState:mousepressed(x, y, b) 
+    local p = Vector:new(x / love.graphics.getWidth(), y / love.graphics.getHeight())
+    if (p - Vector:new(0.5, 0.5)):len() < 0.1 then
+        self.plane:dropPackage()
+    end
+end

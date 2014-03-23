@@ -11,7 +11,7 @@ function Airport:initialize(x,y,rotation)
 end
 
 function Airport:draw()
-    love.graphics.draw(self.image, self.position.x, self.position.y, self.orientation, 1, 1, self.image:getWidth() / 2, self.image:getHeight())
+    love.graphics.draw(self.image, self.position.x, self.position.y, self.orientation, 0.28, 0.28, self.image:getWidth() / 2, self.image:getHeight())
 end
 
 function Airport:update(dt)

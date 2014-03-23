@@ -4,8 +4,9 @@ require "entity"
 Minimap = class("Minimap", Entity)
 
 function Minimap:initialize()    
-    self.position = Vector:new(100, 100)
-    self.size = Vector:new(160, 160)
+    local s = love.graphics.getHeight() / 3.5
+    self.size = Vector:new(s, s)
+    self.position = Vector:new(s * 0.6, s * 0.6)
     self.zoom = self.size.x/love.graphics.getWidth() * 0.33
 end    
 

@@ -57,3 +57,4 @@ function State:drawUI()
 end
 
 function State:keypressed(key) end
+function State:mousepressed(x, y, b) end

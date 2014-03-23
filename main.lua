@@ -29,6 +29,11 @@ end
 function love.load()
     time = 0
     math.randomseed(os.time())
+    if love.window.getPixelScale then
+        PIXELSCALE = love.window.getPixelScale()
+    else
+        PIXELSCALE = 1
+    end
 
     images = {}
     images.plane = love.graphics.newImage("graphics/Plane.png")
@@ -38,7 +43,7 @@ function love.load()
     images.houses[2] = love.graphics.newImage("graphics/House3.png")
     images.church = love.graphics.newImage("graphics/House2.png")
     images.ground = love.graphics.newImage("graphics/background.png")
-    images.airport = love.graphics.newImage("graphics/runway.png")
+    images.airport = love.graphics.newImage("graphics/Airport.png")
     images.gauge = love.graphics.newImage("graphics/Gauge.png")
     images.needle = love.graphics.newImage("graphics/Needle.png")
     images.smoke = love.graphics.newImage("graphics/smoke.png")
@@ -75,5 +80,17 @@ function love.keypressed(key)
         love.event.push("quit")
     else
         currentState:keypressed(key)
+    end
+end
+
+function love.mousepressed(x, y, b)
+    currentState:mousepressed(x, y, b)
+end
+
+function love.touchpressed(id, x, y, p)
+    x = x * love.graphics.getWidth()
+    y = y * love.graphics.getHeight()
+    if id ~= 0 then
+        currentState:mousepressed(x, y, "l")
     end
 end
