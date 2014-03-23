@@ -118,9 +118,8 @@ function GameState:generateWorld(left, right, top, bottom)
             end 
         end    
     end
+
     --airports
-
-
     local density = 0.1/(800*600)
     local count = math.ceil(area * density)
     for k = 1, count do
@@ -133,6 +132,7 @@ function GameState:generateWorld(left, right, top, bottom)
             end 
         end    
     end
+
     --vegetation
     local density = 3/(800*600)
     local count = area*density
@@ -142,14 +142,14 @@ function GameState:generateWorld(left, right, top, bottom)
         self:add(vegetation)
     end
     
-    --[[--tornado
-    local density = 0.05/(800*600)
+    --tornado
+    local density = 0.01/(800*600)
     local count = area*density
     for k = 1, count do
         local pos = Vector:new(math.random(left,right), math.random(top, bottom))
         local tornado = Tornado:new(pos.x, pos.y, tornado)
         self:add(tornado)
-    end]]--
+    end
     
 end
 
