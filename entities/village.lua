@@ -6,16 +6,18 @@ Village.z = 2
 function Village:initialize(x,y)
     self.position = Vector:new(x,y) 
     self.count = math.random(3,10)
+    self.people = 0
     self.houses = {}
     for k = 1, self.count do
         local house = {}
         local direc = Vector:new(math.random(30,60), 0)
         direc:rotate(k*(math.pi*2)/self.count)
         house.image = images.houses[math.random(#images.houses)]
-
         house.x = direc.x
         house.y = direc.y
-        table.insert(self.houses,house)
+        house.people = math.random(2, 10)
+        table.insert(self.houses, house)
+        self.people = self.people + house.people
     end 
     if math.random()< 0.33 then
         local church = {}   

@@ -36,8 +36,8 @@ function Package:landed()
                     self.state:addScore(-1)
                     self.state:add(Text(v.position, "-1", {255, 0, 0}))
                 else
-                    self.state:addScore(v.village.count)
-                    self.state:add(Text(v.position, v.village.count, {0, 255, 0}))
+                    self.state:addScore(v.village.people)
+                    self.state:add(Text(v.position, v.village.people, {0, 255, 0}))
                 end
                 self.state:delete(v)
             end
