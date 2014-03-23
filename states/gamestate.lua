@@ -4,19 +4,24 @@ require "state"
 GameState = class("GameState", State)
 function GameState:initialize()
     State.initialize(self)
-    self.offset = Vector:new()
-    self.generated = {left = 0, right = 0, top = 0, bottom = 0}
     self:reset()
     self.fade = 0
 end
 
 function GameState:reset()
+    self.ui = {}
+    self.world = {}
+    self.offset = Vector:new()
+    self.generated = {left = 0, right = 0, top = 0, bottom = 0}
     self.score = 0
+    GameOverState.highscore = false
     
     self:add(Ground:new())
+    self:add(Clouds:new())
 
     self.plane = Plane:new(0, 0)
     self:add(self.plane)
+    self:add(Airport:new(0, 60, 0))
 
     self:add(Indicators:new(), true)
     self:add(Minimap:new(), true)

@@ -2,7 +2,7 @@ local class = require "middleclass"
 require "entity"
 
 ParticleEntity = class("ParticleEntity", Entity)
-ParticleEntity.z = 3
+ParticleEntity.z = 4
 function ParticleEntity:initialize(position, image, count)
     self.position = position
     self.particles = love.graphics.newParticleSystem(image, count or 100)

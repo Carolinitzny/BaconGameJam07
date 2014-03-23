@@ -2,7 +2,7 @@ local class = require 'middleclass'
 
 require "entity"
 Target = class ("Village", Entity)
-Target.z = 3
+Target.z = 4
 
 function Target:initialize(x,y,village)
     self.position = Vector:new(x,y) 

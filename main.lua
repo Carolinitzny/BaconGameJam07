@@ -13,6 +13,7 @@ require "entities/airport"
 require "entities/particles"
 require "entities/target"
 require "entities/text"
+require "entities/clouds"
 require "indicators"
 require "minimap"
 
@@ -52,6 +53,7 @@ function love.load()
     images.crater = love.graphics.newImage("graphics/Crater.png")
     images.oasis = love.graphics.newImage("graphics/Oasis.png")
     images.bush = love.graphics.newImage("graphics/Bush.png")
+    images.clouds = love.graphics.newImage("graphics/clouds.png")
 
 
     sounds = {}
