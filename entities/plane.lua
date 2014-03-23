@@ -35,8 +35,13 @@ function Plane:update(dt)
     if not self.isChrashing then
         local dir = 0
         local dirChangeSpeed = 5
-        if love.keyboard.isDown("left") or love.keyboard.isDown("a") then dir = -1 end
-        if love.keyboard.isDown("right") or love.keyboard.isDown("d") then dir = 1 end  
+
+        local mx, my = love.mouse.getPosition()
+        local mp = Vector:new(mx / love.graphics.getWidth(), my / love.graphics.getHeight())
+        local md = love.mouse.isDown("l")
+
+        if love.keyboard.isDown("left") or love.keyboard.isDown("a") or (md and mp.x < 0.3) then dir = -1 end
+        if love.keyboard.isDown("right") or love.keyboard.isDown("d") or (md and mp.x > 0.7) then dir = 1 end  
         if not dir then dirChangeSpeed = 20 end
         self.directionChange = self.directionChange * (1 - dt*dirChangeSpeed) + dir * dt * dirChangeSpeed
 
@@ -45,8 +50,9 @@ function Plane:update(dt)
 
         if not self.landing then
             local ds = 0
-            if love.keyboard.isDown("w") or love.keyboard.isDown("up") then ds = 1 end
-            if love.keyboard.isDown("s") or love.keyboard.isDown("down") then ds = -1 end
+            local mc = md and mp.x > 0.3 and mp.x < 0.7
+            if love.keyboard.isDown("w") or love.keyboard.isDown("up") or (mc and mp.y < 0.3) then ds = 1 end
+            if love.keyboard.isDown("s") or love.keyboard.isDown("down") or (mc and mp.y > 0.7) then ds = -1 end
             self.speed = math.max(1, math.min(MAX_SPEED, self.speed + ds * dt))
         end
     else
