@@ -5,10 +5,8 @@ Package = class("Package", Entity)
 Package.z = 5
 function Package:initialize(plane)
     self.position = plane.position:clone()
-    self.direction = plane.direction
-    self.speed = plane.speed * 0.7
+    self.direction = Vector:new(0, - plane.speed * 0.7 * SPEED_FACTOR):rotated(plane.direction)
     self.altitude = 1 -- height above ground
-    tween(1, self, {speed = 0}, "inQuad")
     tween(1, self, {altitude = 0}, "inQuad", function() 
         self.state:add(SmokeRing:new(self.position:clone()))
         self:landed()
@@ -22,10 +20,8 @@ function Package:draw()
 end
 
 function Package:update(dt)
-    local dir = Vector:new(0, -1)
-    dir:rotate(self.direction)
-    dir = dir*dt*self.speed*SPEED_FACTOR
-    self.position = self.position + dir
+    self.direction = self.direction + self.state:getWindVector(dt)
+    self.position = self.position + self.direction * dt * self.altitude
 end
 
 function Package:landed()

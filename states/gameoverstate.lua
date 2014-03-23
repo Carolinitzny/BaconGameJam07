@@ -23,7 +23,7 @@ function GameOverState:draw()
     love.graphics.setFont(fonts.writing50)
     local text = "GAME OVER"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 100)
-    love.graphics.print("Enter your name!", love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth("Enter your name!") / 2, 200)
+    love.graphics.print("Enter your name to save your score!", love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth("Enter your name to save your score!") / 2, 200)
 
 
     love.graphics.print(self.name, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(self.name) / 2, 300)
@@ -49,7 +49,7 @@ function GameOverState:keypressed(key)
 end
 
 function GameOverState:textinput(char)
-    self.name = self.name .. char
+    self.name = string.upper(self.name .. char)
 end
 
 function GameOverState:onEnter()

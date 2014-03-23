@@ -54,6 +54,7 @@ function love.load()
     images.oasis = love.graphics.newImage("graphics/Oasis.png")
     images.bush = love.graphics.newImage("graphics/Bush.png")
     images.clouds = love.graphics.newImage("graphics/clouds.png")
+    images.windsock = love.graphics.newImage("graphics/windsock.png")
 
 
     sounds = {}

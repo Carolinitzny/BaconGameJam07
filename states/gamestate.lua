@@ -14,6 +14,10 @@ function GameState:reset()
     self.offset = Vector:new()
     self.generated = {left = 0, right = 0, top = 0, bottom = 0}
     self.score = 0
+    time = 0
+
+    self.windDirection = 0
+    self.windStrength = 0
     GameOverState.highscore = false
     
     self:add(Ground:new())
@@ -27,8 +31,16 @@ function GameState:reset()
     self:add(Minimap:new(), true)
 end
 
+function GameState:getWindVector(dt)
+    return Vector:new(self.windFactor * self.windStrength * dt, 0):rotated(self.windDirection)
+end
+
 function GameState:update(dt)
     self:updateEntities(dt)
+
+    self.windDirection = love.math.noise(10000+time*0.1) * math.pi
+    self.windStrength = time 
+    self.windFactor = love.math.noise(time*0.1)
 
     self.offset = self.plane.position - Vector:new(love.graphics.getWidth(), love.graphics.getHeight())*0.5    
 
@@ -67,6 +79,9 @@ function GameState:draw()
     love.graphics.pop()
     self:drawUI()
 
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.draw(images.windsock, 100, 300, self:getWindVector(1):angleTo(Vector:new(-1, 0)), 1, self.windFactor, images.windsock:getWidth()/2, images.windsock:getHeight())
+
     love.graphics.setColor(255, 255, 255, self.fade * 255)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
@@ -104,6 +119,7 @@ function GameState:generateWorld(left, right, top, bottom)
         end    
     end
     --airports
+
 
     local density = 0.1/(800*600)
     local count = math.ceil(area * density)
