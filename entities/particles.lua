@@ -87,8 +87,37 @@ function TargetSignal:initialize(position, target)
     self.particles:setSizes(0.1, 0.5)
 end
 
--- function TargetSignal:draw()
---     love.graphics.setBlendMode("additive")
---     love.graphics.draw(self.particles)
---     love.graphics.setBlendMode("alpha")
--- end
+TornadoSwirl = class("TornadoSwirl", ParticleEntity)
+function TornadoSwirl:initialize(position)
+    ParticleEntity.initialize(self, position, images.smoke2, 100)
+    self.particles:setEmissionRate(10)
+    self.particles:setParticleLifetime(2)
+    -- self.particles:setSpeed(-100)
+    self.particles:setRadialAcceleration(-100)
+    self.particles:setTangentialAcceleration(100)
+    self.particles:setSpread(math.pi * 2)
+    self.particles:setColors(
+        100, 100, 100, 255,
+        255, 255, 255, 0
+        )
+    self.particles:setSizes(0.1, 2)
+    -- self.particles:setAreaSpread("normal", 100, 100)
+
+    self.particles:setBufferSize( 2000 )
+    self.particles:setEmissionRate( 400 )
+    self.particles:setParticleLifetime( 2 )
+    local a = 250
+    local b = a * 0.6
+    local c = a * 0.3
+    self.particles:setColors( 
+        c, 0.9*c, 0.5*c, 0, 
+        b, 0.9*b, 0.5*b, 20,
+        a, 0.9*a, 0.5*a, 50,
+        a, 0.9*a, 0.5*a, 0)
+    self.particles:setSizes( 0.1, 0.7)
+    self.particles:setSpeed( 50, 70 )
+    self.particles:setSpin(10)
+    self.particles:setTangentialAcceleration( 160 )
+    self.particles:setInsertMode("bottom")
+    -- self.particles:setRadialAcceleration(-100)
+end
