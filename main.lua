@@ -51,6 +51,7 @@ function love.load()
     images.circle = love.graphics.newImage("graphics/circle.png")
     images.crater = love.graphics.newImage("graphics/Crater.png")
     images.clouds = love.graphics.newImage("graphics/clouds.png")
+    images.windsock = love.graphics.newImage("graphics/windsock.png")
 
     sounds = {}
     sounds.landing = love.sound.newSoundData("sound/landing.ogg")   

@@ -1,7 +1,7 @@
 local class = require 'middleclass'
 require "entity"
 
-SPEED_FACTOR = 140
+SPEED_FACTOR = 240
 MAX_SPEED = 2
 FUEL_CONSUMPTION = 0.025
 
@@ -13,7 +13,7 @@ function Plane:initialize(x, y)
     self.speed = 1
     self.direction = 0
     self.directionChange = 0
-    self.rotationspeed = 0.9
+    self.rotationspeed = 2
     self.fuel = 1
     self.fuelconsumption = 1
     self.quantity = 9
@@ -73,7 +73,13 @@ function Plane:update(dt)
 
     local dir = Vector:new(0, -1)
     dir:rotate(self.direction)
-    dir = dir * dt * self.speed * SPEED_FACTOR
+    dir = dir * dt * self.speed * SPEED_FACTOR 
+
+    -- wind
+    if not (self.isCrashing or self.landing or self.crashed) then
+        dir = dir + self.state:getWindVector(dt) * 0.2
+    end
+
     self.position = self.position + dir
     self.fuel = math.max(0, self.fuel - self.fuelconsumption * dt * FUEL_CONSUMPTION * math.pow(self.speed, 1.3))
     if self.fuel <= 0 then
@@ -110,7 +116,6 @@ function Plane:dropPackage()
 end
 
 function Plane:crash()
-    
     if self.isCrashing then return end
     self.isCrashing = true
     self.sound:pause()
@@ -144,7 +149,8 @@ function Plane:land(airport)
     end
 
     tween(1, self, {direction = dir}, "inOutQuad")
-    tween(1.3, self, {altitude = 0}, "inOutQuad")
+    tween(1.2, self, {altitude = 0}, "inOutQuad")
+    self.speed = 0.6
     tween(1.5, self, {speed = 0}, "inExpo", function()
         self:refuel()
     end)
@@ -164,7 +170,7 @@ end
 function Plane:liftoff()
     source = love.audio.newSource(sounds.liftoff)
     source:play()
-    self.rotationspeed = 0.9
+    self.rotationspeed = 2
     self.fuelconsumption = 1
     tween(1, self, {speed = 1}, "inQuad")
     tween(1, {}, {}, nil, function() 

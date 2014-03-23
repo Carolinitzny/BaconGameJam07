@@ -45,7 +45,7 @@ function GameOverState:keypressed(key)
 end
 
 function GameOverState:textinput(char)
-    self.name = self.name .. char
+    self.name = string.upper(self.name .. char)
 end
 
 function GameOverState:onEnter()
