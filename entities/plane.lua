@@ -1,15 +1,20 @@
 local class = require 'middleclass'
 require "entity"
 
+SPEED_FACTOR = 140
+MAX_SPEED = 2
+FUEL_CONSUMPTION = 0.025
+
 Plane = class ("Plane", Entity)
 Plane.z = 5
 function Plane:initialize(x, y)
     self.position = Vector:new(x,y)
-    self.speed = 140
+    self.speed = 1
     self.direction = 0
+    self.directionChange = 0
     self.rotationspeed = 0.9
     self.fuel = 1
-    self.fuelconsumption = 0.025
+    self.fuelconsumption = 1
     self.quantity = 12
     self.altitude = 1
     self.landing = false
@@ -28,23 +33,31 @@ end
 
 function Plane:update(dt)
     if not self.isChrashing then
-        if love.keyboard.isDown("left") then
-            self.direction = self.direction - self.rotationspeed*dt
-            self.spinAngleSpeed = -self.rotationspeed
+        local dir = 0
+        local dirChangeSpeed = 5
+        if love.keyboard.isDown("left") or love.keyboard.isDown("a") then dir = -1 end
+        if love.keyboard.isDown("right") or love.keyboard.isDown("d") then dir = 1 end  
+        if not dir then dirChangeSpeed = 20 end
+        self.directionChange = self.directionChange * (1 - dt*dirChangeSpeed) + dir * dt * dirChangeSpeed
+
+        self.direction = self.direction + self.rotationspeed*dt*self.directionChange
+        self.spinAngleSpeed = self.directionChange
+
+        if not self.landing then
+            local ds = 0
+            if love.keyboard.isDown("w") or love.keyboard.isDown("up") then ds = 1 end
+            if love.keyboard.isDown("s") or love.keyboard.isDown("down") then ds = -1 end
+            self.speed = math.max(1, math.min(MAX_SPEED, self.speed + ds * dt))
         end
-        if love.keyboard.isDown("right") then
-            self.direction = self.direction + self.rotationspeed*dt
-            self.spinAngleSpeed = self.rotationspeed
-        end  
     else
         self.spinAngle = self.spinAngle + self.spinAngleSpeed * dt
     end
 
     local dir = Vector:new(0, -1)
     dir:rotate(self.direction)
-    dir = dir * dt * self.speed
+    dir = dir * dt * self.speed * SPEED_FACTOR
     self.position = self.position + dir
-    self.fuel = math.max(0, self.fuel - self.fuelconsumption*dt)
+    self.fuel = math.max(0, self.fuel - self.fuelconsumption * dt * FUEL_CONSUMPTION * math.pow(self.speed, 1.3))
     if self.fuel <= 0 then
         self:crash()
     end
@@ -81,7 +94,6 @@ function Plane:crash()
     self.isChrashing = true
 
     tween(3, self, {altitude = 0}, "inQuad")
-    tween(3, self, {rotationspeed = 10}, "inCirc")
     tween(3, self, {speed = 0}, "inCirc", function() 
         self.state:add(Explosion:new(self.position:clone()))
         self.crashed = true
@@ -112,9 +124,10 @@ end
 
 function Plane:liftoff()
     self.rotationspeed = 0.9
-    self.fuelconsumption = 0.025
-    tween(1, self, {speed = 140}, "outQuad")
-    tween(2, self, {altitude = 1}, "inQuad")
-    self.landing = false
+    self.fuelconsumption = 1
+    tween(1, self, {speed = 1}, "outQuad")
+    tween(2, self, {altitude = 1}, "inQuad", function() 
+        self.landing = false
+    end)
 end
 

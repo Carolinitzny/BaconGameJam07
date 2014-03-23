@@ -7,6 +7,7 @@ function Airport:initialize(x,y,rotation)
     self.position = Vector:new(x,y)
     self.orientation = rotation
     self.image = images.airport
+    self.lockedTime = 0
 end
 
 function Airport:draw()
@@ -14,10 +15,19 @@ function Airport:draw()
 end
 
 function Airport:update(dt)
-    local plane = self.state.plane
-    local distance = (plane.position - self.position):len()
-    local angleDifference = math.abs(((plane.direction - self.orientation) + math.pi) % (2 * math.pi) - math.pi)
-    if distance < 20 and angleDifference < 0.2 and not plane.landing then
-        plane:land()
+    if self.lockedTime > 0 then
+        self.lockedTime = self.lockedTime - dt
+    else
+        local plane = self.state.plane
+        local distance = (plane.position - self.position):len()
+        local angleDifference = math.abs(((plane.direction - self.orientation) + math.pi) % (2 * math.pi) - math.pi)
+        if distance < 20 and angleDifference < 0.2 and not plane.landing then
+            if plane.speed <= 1.2 then
+                plane:land()
+            else
+                self.lockedTime = 1
+                print("too fast!")
+            end
+        end
     end
 end
