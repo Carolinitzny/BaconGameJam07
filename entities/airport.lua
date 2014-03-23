@@ -8,10 +8,18 @@ function Airport:initialize(x,y,rotation)
     self.orientation = rotation
     self.image = images.airport
     self.lockedTime = 0
+    self.arrowMove = 3
 end
 
 function Airport:draw()
-    love.graphics.draw(self.image, self.position.x, self.position.y, self.orientation, 0.28, 0.28, self.image:getWidth() / 2 + 24, self.image:getHeight())
+        local plane = self.state.plane
+        local distance = (plane.position - self.position):len()
+        love.graphics.draw(self.image, self.position.x, self.position.y, self.orientation, 0.28, 0.28, self.image:getWidth() / 2 + 24, self.image:getHeight())
+        if distance < 500 and plane.firstLanding then
+            self.z = 10
+            love.graphics.draw(images.arrow, self.position.x, self.position.y, self.orientation-math.pi/2, 1, 1, images.arrow:getWidth()*self.arrowMove, images.arrow:getHeight()/2)
+            self.z = 1
+        end
 end
 
 function Airport:update(dt)
@@ -31,4 +39,5 @@ function Airport:update(dt)
             end
         end
     end
+    self.arrowMove = (self.arrowMove - 2*dt)%3
 end
