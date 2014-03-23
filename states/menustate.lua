@@ -22,6 +22,9 @@ function MenuState:draw()
     local text = "Kids will starve!"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 100)
 
+    local text = "Press Enter to try it again!"
+    love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 180)
+    
     love.graphics.setFont(fonts.writing30)
     local text = "Highscores"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, love.graphics.getHeight() - 200)
@@ -43,10 +46,12 @@ function MenuState:draw()
 end
 
 function MenuState:keypressed(key)
-    tween(1, self, {fade=1}, "inOutQuad", function()
-        states.game:reset()
-        setState(states.game)
-    end)
+    if key == "return" then 
+        tween(1, self, {fade=1}, "inOutQuad", function()
+            states.game:reset()
+            setState(states.game)
+        end)
+    end
 end
 
 function MenuState:onEnter()
