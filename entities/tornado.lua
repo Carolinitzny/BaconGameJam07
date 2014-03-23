@@ -9,6 +9,7 @@ function Tornado:initialize(x,y)
     self.direction = Vector:new(0, 0)
     self.particles = TornadoSwirl:new(self.position)
     self.seed = math.random() * 1000
+    self.sound = love.audio.newSource(sounds.tornado)
 end
 
 function Tornado:update(dt)
@@ -27,6 +28,13 @@ function Tornado:update(dt)
             plane:crash()
         end
         plane.spinAngleSpeed = plane.spinAngleSpeed + (1 - len/120) * 50 * dt
+    end
+
+    if len < 500 then
+        self.sound:setVolume(1 - len / 500)
+        self.sound:play()
+    else
+        self.sound:pause()
     end
 end
 

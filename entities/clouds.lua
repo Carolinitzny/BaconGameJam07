@@ -13,7 +13,7 @@ function Clouds:draw()
     local pos = -offset * 0.5
     offset = offset - pos
 
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(255, 255, 255, 200)
     for x = math.floor(offset.x/w), math.ceil((offset.x + W)/w) do
         for y = math.floor(offset.y/h), math.ceil((offset.y + H)/h) do
             love.graphics.draw(images.clouds, pos.x + x * w, pos.y + y * h, 0, s, s)

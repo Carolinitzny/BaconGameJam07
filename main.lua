@@ -76,6 +76,7 @@ function love.load()
     sounds.refuel = love.sound.newSoundData("sound/refuel.ogg")
     sounds.plop = love.sound.newSoundData("sound/plop.ogg")
     sounds.theme = love.sound.newSoundData("sound/theme.ogg")
+    sounds.tornado = love.sound.newSoundData("sound/tornado.ogg")
 
 
     fonts = {}
