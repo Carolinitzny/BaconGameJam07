@@ -1,6 +1,8 @@
 tween = require 'tween'
 highscore = require 'sick'
 local class = require 'middleclass'
+
+require "helper"
 require "entity"
 require "entities/plane"
 require "entities/package"
@@ -16,15 +18,6 @@ require "minimap"
 require "state"
 require "states/gamestate"
 require "states/menustate"
-
-function table.removeValue(t, value)
-    for k,v in pairs(t) do
-        if v == value then
-            table.remove(t, k)
-            return
-        end
-    end
-end
 
 function setState(state)
     currentState = state

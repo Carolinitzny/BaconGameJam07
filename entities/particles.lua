@@ -65,3 +65,26 @@ function SmokeRing:initialize(position)
         255, 200, 0, 0)
     self.particles:setSizes(0.1, 1.0)
 end
+
+TargetSignal = class("TargetSignal", ParticleEntity)
+function TargetSignal:initialize(position, target)
+    ParticleEntity.initialize(self, position, images.smoke, 100)
+    self.target = target
+    self.particles:setEmissionRate(50)
+    self.particles:setParticleLifetime(1)
+    self.particles:setSpeed(50)
+    self.particles:setSpread(0.5)
+    self.particles:setDirection(- math.pi /2)
+    local c = self.target.color
+    self.particles:setColors(
+        255, 255, 255, 255,
+        c[1], c[2], c[3], 128,
+        c[1], c[2], c[3], 0)
+    self.particles:setSizes(0.1, 0.5)
+end
+
+-- function TargetSignal:draw()
+--     love.graphics.setBlendMode("additive")
+--     love.graphics.draw(self.particles)
+--     love.graphics.setBlendMode("alpha")
+-- end
