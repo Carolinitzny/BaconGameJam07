@@ -12,6 +12,7 @@ require "entities/airport"
 require "entities/particles"
 require "entities/target"
 require "entities/text"
+require "entities/clouds"
 require "indicators"
 require "minimap"
 
@@ -49,6 +50,7 @@ function love.load()
     images.smokeRing = love.graphics.newImage("graphics/smokeRing.png")
     images.circle = love.graphics.newImage("graphics/circle.png")
     images.crater = love.graphics.newImage("graphics/Crater.png")
+    images.clouds = love.graphics.newImage("graphics/clouds.png")
 
     sounds = {}
     sounds.landing = love.sound.newSoundData("sound/landing.ogg")   

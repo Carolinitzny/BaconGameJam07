@@ -23,9 +23,15 @@ function Plane:initialize(x, y)
     self.crashed = false
     self.size = 1
 
+    self.landing = true
+    self.altitude = 0
+    self.fuelconsumption = 0
+    self.speed = 0
+    self:liftoff()
+
     self.sound = love.audio.newSource(sounds.flight)
     self.sound:setLooping(true)
-    self.sound:play()
+    -- self.sound:play()
 
     -- Trudel-Winkel, wird nicht in Richtung eingerechnet aber zum Drehen der Grafik verwendet
     self.spinAngle = 0
@@ -122,15 +128,24 @@ function Plane:crash()
     
 end
 
-function Plane:land()
+function Plane:land(airport)
     self.landing = true
     self.sound:pause()
     self.rotationspeed = 0
     self.fuelconsumption = 0
     source = love.audio.newSource(sounds.landing)
     source:play()
-    tween(1, self, {altitude = 0}, "inOutQuad")
-    tween(1.5, self, {speed = 0}, "inQuad", function()
+
+    local pi2 = math.pi * 2
+    local dir = (airport.orientation + math.pi) % pi2 - math.pi
+    self.direction = (self.direction + math.pi) % pi2 - math.pi
+    if dir < 0 and self.direction > 0 then
+        dir = dir + pi2
+    end
+
+    tween(1, self, {direction = dir}, "inOutQuad")
+    tween(1.3, self, {altitude = 0}, "inOutQuad")
+    tween(1.5, self, {speed = 0}, "inExpo", function()
         self:refuel()
     end)
     
@@ -151,10 +166,12 @@ function Plane:liftoff()
     source:play()
     self.rotationspeed = 0.9
     self.fuelconsumption = 1
-    tween(1, self, {speed = 1}, "outQuad")
-    tween(2, self, {altitude = 1}, "inQuad", function() 
-        self.landing = false
-        self.sound:play()
+    tween(1, self, {speed = 1}, "inQuad")
+    tween(1, {}, {}, nil, function() 
+        tween(3, self, {altitude = 1}, "inOutQuad", function() 
+            self.landing = false
+            self.sound:play()
+        end)
     end)
 end
 

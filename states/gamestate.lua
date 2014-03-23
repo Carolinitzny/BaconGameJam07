@@ -16,9 +16,11 @@ function GameState:reset()
     self.score = 0
     
     self:add(Ground:new())
+    self:add(Clouds:new())
 
     self.plane = Plane:new(0, 0)
     self:add(self.plane)
+    self:add(Airport:new(0, 60, 0))
 
     self:add(Indicators:new(), true)
     self:add(Minimap:new(), true)

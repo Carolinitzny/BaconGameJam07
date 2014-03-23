@@ -11,7 +11,7 @@ function Airport:initialize(x,y,rotation)
 end
 
 function Airport:draw()
-    love.graphics.draw(self.image, self.position.x, self.position.y, self.orientation, 0.28, 0.28, self.image:getWidth() / 2, self.image:getHeight())
+    love.graphics.draw(self.image, self.position.x, self.position.y, self.orientation, 0.28, 0.28, self.image:getWidth() / 2 + 24, self.image:getHeight())
 end
 
 function Airport:update(dt)
@@ -23,7 +23,7 @@ function Airport:update(dt)
         local angleDifference = math.abs(((plane.direction - self.orientation) + math.pi) % (2 * math.pi) - math.pi)
         if distance < 20 and angleDifference < 0.2 and not plane.landing and not plane.isChrashing then
             if plane.speed <= 1.2 then
-                plane:land()
+                plane:land(self)
             else
                 self.lockedTime = 1
 

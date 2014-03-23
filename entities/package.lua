@@ -2,7 +2,7 @@ local class = require 'middleclass'
 require "entity"
 
 Package = class("Package", Entity)
-Package.z = 2
+Package.z = 3
 function Package:initialize(plane)
     self.position = plane.position:clone()
     self.direction = plane.direction
