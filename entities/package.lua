@@ -2,7 +2,7 @@ local class = require 'middleclass'
 require "entity"
 
 Package = class("Package", Entity)
-Package.z = 3
+Package.z = 5
 function Package:initialize(plane)
     self.position = plane.position:clone()
     self.direction = Vector:new(0, - plane.speed * 0.7 * SPEED_FACTOR):rotated(plane.direction)

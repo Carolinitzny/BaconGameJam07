@@ -6,8 +6,9 @@ MAX_SPEED = 2
 FUEL_CONSUMPTION = 0.025
 
 Plane = class ("Plane", Entity)
-Plane.z = 5
+Plane.z = 6
 function Plane:initialize(x, y)
+    self.z = 6
     self.normalFlight = true
     self.position = Vector:new(x,y)
     self.speed = 1
@@ -125,7 +126,7 @@ function Plane:crash()
     tween(2.6, self, {speed = 0}, "inCirc", function() 
         self.state:add(Explosion:new(self.position:clone()))
         self.crashed = true
-        Plane.z = 1
+        Plane.z = 3
         tween(2, {}, {}, nil, function()
             self.state:fadeOver(states.gameover)
         end)
@@ -160,7 +161,7 @@ end
 function Plane:refuel()
     source = love.audio.newSource(sounds.refuel)
     source:play()
-    tween (2, self, {quantity = 12})
+    tween (2, self, {quantity = 9})
     tween(1.5, self, {direction = self.direction + math.pi})
     tween(2, self, {fuel = 1}, "inOutQuad", function()
         self:liftoff()

@@ -6,6 +6,7 @@ function GameOverState:initialize()
     State.initialize(self)
     self.fade = 0
     self.name = ""
+    self.highscore = false
 end
 
 function GameOverState:update(dt)
@@ -22,7 +23,7 @@ function GameOverState:draw()
     love.graphics.setFont(fonts.writing50)
     local text = "GAME OVER"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 100)
-    love.graphics.print("Enter your name!", love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth("Enter your name!") / 2, 200)
+    love.graphics.print("Enter your name to save your score!", love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth("Enter your name to save your score!") / 2, 200)
 
 
     love.graphics.print(self.name, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(self.name) / 2, 300)
@@ -33,7 +34,10 @@ end
 
 function GameOverState:keypressed(key)
     if key == "return" and self.name then
-        highscore.add(self.name, states.game.score)
+        if self.highscore == false then
+            highscore.add(self.name, states.game.score)
+            self.highscore = not self.highscore
+        end
         tween(1, self, {fade=1}, "inOutQuad", function()
             setState(states.menu)
             states.game:reset()
@@ -49,6 +53,7 @@ function GameOverState:textinput(char)
 end
 
 function GameOverState:onEnter()
+    self.highscore = false
     self.fade = 1
     tween(1, self, {fade=0}, "inOutQuad")
 end

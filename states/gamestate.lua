@@ -18,6 +18,7 @@ function GameState:reset()
 
     self.windDirection = 0
     self.windStrength = 0
+    GameOverState.highscore = false
     
     self:add(Ground:new())
     self:add(Clouds:new())
@@ -50,22 +51,22 @@ function GameState:update(dt)
 
     -- left
     if self.plane.position.x < g.left + distance then
-        self:generateVillages(g.left - size, g.left, g.top, g.bottom)
+        self:generateWorld(g.left - size, g.left, g.top, g.bottom)
         g.left = g.left - size
     end    
     --right 
     if self.plane.position.x > g.right - distance then
-        self:generateVillages(g.right, g.right + size, g.top, g.bottom)
+        self:generateWorld(g.right, g.right + size, g.top, g.bottom)
         g.right = g.right + size
     end    
     --top
     if self.plane.position.y < g.top + distance then
-        self:generateVillages(g.left , g.right, g.top - size, g.top)
+        self:generateWorld(g.left , g.right, g.top - size, g.top)
         g.top = g.top - size
     end
     --bottom    
     if self.plane.position.y > g.bottom - distance then
-        self:generateVillages(g.left, g.right, g.bottom, g.bottom + size)
+        self:generateWorld(g.left, g.right, g.bottom, g.bottom + size)
         g.bottom = g.bottom + size
     end    
 end
@@ -97,10 +98,11 @@ function GameState:isVillageNearby(pos, threshold)
     return false
 end
 
-function GameState:generateVillages(left, right, top, bottom)
+function GameState:generateWorld(left, right, top, bottom)
+    local area = math.abs((right - left)* (bottom - top))
+    
     --villages
     local density = 1.2/(800*600)
-    local area = math.abs((right - left)* (bottom - top))
     local count = area * density
     
     for k = 1, count do
@@ -119,21 +121,27 @@ function GameState:generateVillages(left, right, top, bottom)
     --airports
 
 
-   local density = 0.1/(800*600)
-    local area = math.abs((right - left)* (bottom - top))
+    local density = 0.1/(800*600)
     local count = math.ceil(area * density)
     for k = 1, count do
         for l = 1, 50 do
             local pos = Vector:new(math.random(left,right), math.random(top, bottom))
             if not self:isVillageNearby(pos, 200) or l == 50 then
-                if l == 50 then print("Meh airport") end
                 local airport = Airport:new(pos.x, pos.y, math.random()*2*math.pi)
                 self:add(airport)
                 break    
             end 
         end    
     end
-     
+    --vegetation
+    local density = 3/(800*600)
+    local count = area*density
+    for k = 1, count do
+        local pos = Vector:new(math.random(left,right), math.random(top, bottom))
+        local vegetation = Vegetation:new(pos.x, pos.y, vegetation)
+        self:add(vegetation)
+    end
+    
 end
 
 function GameState:keypressed(key)
