@@ -58,3 +58,4 @@ end
 
 function State:keypressed(key) end
 function State:mousepressed(x, y, b) end
+function State:onEnter() end

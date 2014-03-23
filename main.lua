@@ -26,6 +26,11 @@ function table.removeValue(t, value)
     end
 end
 
+function setState(state)
+    currentState = state
+    state:onEnter()
+end
+
 function love.load()
     time = 0
     math.randomseed(os.time())
@@ -53,14 +58,15 @@ function love.load()
 
     fonts = {}
     fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)
-    fonts.writing = love.graphics.newFont("TMJ.ttf")
+    fonts.writing30 = love.graphics.newFont("TMJ.ttf", 30)
+    fonts.writing50 = love.graphics.newFont("TMJ.ttf", 50)
     states = {}
     states.game = GameState:new()
     states.menu = MenuState:new()
 
     currentState = states.game
     
-    highscore.set("highscore", 10, "nobody", 0)
+    highscore.set("highscore", 3, "nobody", 0)
 end
 
 function love.update(dt)

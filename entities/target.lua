@@ -11,9 +11,9 @@ function Target:initialize(x,y,village)
 end
 
 function Target:draw()
-    love.graphics.setColor(0, 255, 0, 20)
-    love.graphics.circle("fill", self.position.x, self.position.y, self.size*5) 
+    -- love.graphics.setColor(0, 255, 0, 20)
+    -- love.graphics.circle("fill", self.position.x, self.position.y, self.size*5) 
     love.graphics.setColor(0, 255, 0)
-    love.graphics.circle("fill", self.position.x, self.position.y+10, self.size)
+    love.graphics.circle("fill", self.position.x, self.position.y, self.size)
     love.graphics.setColor(255, 255, 255)    
 end
