@@ -143,7 +143,7 @@ function GameState:generateWorld(left, right, top, bottom)
     end
     
     --tornado
-    local density = 0.01/(800*600)
+    local density = 0.5/(800*600)
     local count = area*density
     for k = 1, count do
         local pos = Vector:new(math.random(left,right), math.random(top, bottom))
