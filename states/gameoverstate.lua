@@ -36,6 +36,7 @@ function GameOverState:keypressed(key)
         highscore.add(self.name, states.game.score)
         tween(1, self, {fade=1}, "inOutQuad", function()
             setState(states.menu)
+            states.game:reset()
         end)
     end
     if key == "backspace" then

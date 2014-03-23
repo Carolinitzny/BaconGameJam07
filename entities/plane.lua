@@ -19,7 +19,7 @@ function Plane:initialize(x, y)
     self.quantity = 9
     self.altitude = 1
     self.landing = false
-    self.isChrashing = false
+    self.isCrashing = false
     self.crashed = false
     self.size = 1
 
@@ -38,7 +38,7 @@ end
 
 function Plane:update(dt)
        
-    if not self.isChrashing then
+    if not self.isCrashing then
         local dir = 0
         local dirChangeSpeed = 5
 
@@ -95,7 +95,7 @@ function Plane:draw()
 end
 
 function Plane:dropPackage()
-    if self.quantity > 0 then
+    if self.quantity > 0 and self.isCrashing == false then
         source = love.audio.newSource(sounds.drop)
     source:play()
         self.state:add(Package:new(self))
@@ -105,8 +105,8 @@ end
 
 function Plane:crash()
     
-    if self.isChrashing then return end
-    self.isChrashing = true
+    if self.isCrashing then return end
+    self.isCrashing = true
     self.sound:pause()
     source = love.audio.newSource(sounds.crashing)
     source:play()
