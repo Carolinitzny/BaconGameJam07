@@ -22,7 +22,7 @@ function MenuState:draw()
     local text = "Kids will starve!"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 100)
 
-    local text = "Press Enter to try it again!"
+    local text = "Press Return to try it again!"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 180)
     
     love.graphics.setFont(fonts.writing30)
