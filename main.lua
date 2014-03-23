@@ -53,7 +53,7 @@ function love.load()
 
     fonts = {}
     fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)
-
+    fonts.writing = love.graphics.newFont("TMJ.ttf")
     states = {}
     states.game = GameState:new()
     states.menu = MenuState:new()
