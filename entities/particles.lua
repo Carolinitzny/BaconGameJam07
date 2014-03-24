@@ -110,10 +110,10 @@ function TornadoSwirl:initialize(position)
     local b = a * 0.6
     local c = a * 0.3
     self.particles:setColors( 
-        c, 0.9*c, 0.5*c, 0, 
-        b, 0.9*b, 0.5*b, 20,
-        a, 0.9*a, 0.5*a, 50,
-        a, 0.9*a, 0.5*a, 0)
+        c, 0.9*c, 0.8*c, 0, 
+        b, 0.9*b, 0.8*b, 20,
+        a, 0.9*a, 0.8*a, 50,
+        a, 0.9*a, 0.8*a, 0)
     self.particles:setSizes( 0.1, 0.7)
     self.particles:setSpeed( 50, 70 )
     self.particles:setSpin(10)

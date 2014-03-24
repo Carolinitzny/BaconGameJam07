@@ -84,10 +84,6 @@ function GameState:draw()
     love.graphics.pop()
     self:drawUI()
 
-    love.graphics.setColor(255, 255, 255)
-    local angle = self:getWindVector(1):angleTo(Vector:new(-1, 0)) + math.sin(self.windSwing*5) * 0.1
-    love.graphics.draw(images.windsock, 100, 300, angle, 1, 0.5 + 0.5 *self.windFactor, images.windsock:getWidth()/2, images.windsock:getHeight())
-
     love.graphics.setColor(255, 255, 255, self.fade * 255)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end

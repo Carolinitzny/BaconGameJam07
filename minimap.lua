@@ -60,7 +60,11 @@ function Minimap:draw()
     local w, h = img:getWidth(), img:getHeight()
     love.graphics.draw(images.minimapFrame, self.position.x, self.position.y, 0, self.size.x / w, self.size.y / h, w / 2, h / 2)
 
-
     love.graphics.setScissor()
+
     love.graphics.setColor(255, 255, 255)
+    local img = images.windsock
+    local angle = self.state:getWindVector(1):angleTo(Vector:new(-1, 0)) + math.sin(self.state.windSwing*5) * 0.1
+    local s = self.size.x / 160
+    love.graphics.draw(img, self.position.x, self.position.y + self.size.y, angle, s, s * (0.5 + 0.5 * self.state.windFactor), img:getWidth()/2, img:getHeight())
 end    
