@@ -44,7 +44,7 @@ function GameState:update(dt)
 
     self.windDirection = love.math.noise(10000+time*0.1) * math.pi
     local f = love.math.noise(time*0.4)
-    self.windFactor = f * (math.log(time * 0.01 + 1))
+    self.windFactor = f * (math.log(time * 0.05 + 1))
     self.windSwing = self.windSwing + f * dt
 
     self.offset = self.plane.position - Vector:new(love.graphics.getWidth(), love.graphics.getHeight())*0.5    
