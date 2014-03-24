@@ -157,8 +157,8 @@ end
 function GameState:keypressed(key)
     if key == " " then
         self.plane:dropPackage()
-    elseif key == "tab" then
-        self:fadeOver(states.title)
+    -- elseif key == "tab" then
+    --     self:fadeOver(states.title)
     end
 end
 
