@@ -86,12 +86,15 @@ function Plane:update(dt)
             local dir = 0
             local dirChangeSpeed = 5
 
-            local mx, my = love.mouse.getPosition()
-            local mp = Vector:new(mx / love.graphics.getWidth(), my / love.graphics.getHeight())
-            local md = love.mouse.isDown("l")
+            if love.keyboard.isDown("left") or love.keyboard.isDown("a") then dir = -1 end
+            if love.keyboard.isDown("right") or love.keyboard.isDown("d") then dir = 1 end  
 
-            if love.keyboard.isDown("left") or love.keyboard.isDown("a") or (md and mp.x < 0.3) then dir = -1 end
-            if love.keyboard.isDown("right") or love.keyboard.isDown("d") or (md and mp.x > 0.7) then dir = 1 end  
+            for id, touch in pairs(getTouches()) do
+                if touch.x < 0.3*love.graphics.getWidth() then dir = dir - 1 end
+                if touch.x > 0.7*love.graphics.getWidth() then dir = dir + 1 end
+            end
+            dir = math.clamp(dir, -1, 1)
+
             if not dir then dirChangeSpeed = 20 end
             self.directionChange = self.directionChange * (1 - dt*dirChangeSpeed) + dir * dt * dirChangeSpeed
 
@@ -99,10 +102,17 @@ function Plane:update(dt)
             self.spinAngleSpeed = self.directionChange
 
             if not self.landing then
-                local ds = 0
-                local mc = md and mp.x > 0.3 and mp.x < 0.7
-                if love.keyboard.isDown("w") or love.keyboard.isDown("up") or (mc and mp.y < 0.3) then ds = 1 end
-                if love.keyboard.isDown("s") or love.keyboard.isDown("down") or (mc and mp.y > 0.7) then ds = -1 end
+                ds = 0
+                if love.keyboard.isDown("w") or love.keyboard.isDown("up") then ds = 1 end
+                if love.keyboard.isDown("s") or love.keyboard.isDown("down") then ds = -1 end
+
+                for id, touch in pairs(getTouches()) do
+                    local x, y = touch.x / love.graphics.getWidth(), touch.y / love.graphics.getHeight()
+                    if x > 0.3 and x < 0.7 and y < 0.4 then ds = ds + 1 end
+                    if x > 0.3 and x < 0.7 and y > 0.6 then ds = ds - 1 end
+                end
+                ds = math.clamp(ds, -1, 1)
+
                 self.speed = math.max(1, math.min(MAX_SPEED, self.speed + ds * dt))
             end
         else
@@ -145,6 +155,7 @@ function Plane:update(dt)
 end
 
 function Plane:draw()
+    love.graphics.setColor(255, 255, 255)
     self.smokeTrailLeft:draw()
     self.smokeTrailRight:draw()
     self.smokeTrailLeft2:draw()

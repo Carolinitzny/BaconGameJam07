@@ -11,6 +11,7 @@ function Button:initialize(text, pos, size)
     self.size = size or Vector(100, 30)
     self.z = 1000
     self.active = true
+    self.tolerance = 1
 
     self.onTouchPressed = nil
     self.onTouchReleased = nil
@@ -19,10 +20,10 @@ function Button:initialize(text, pos, size)
 end
 
 function Button:isInside(p)
-    return p.x >= self.position.x - self.size.x / 2 and 
-        p.x <= self.position.x + self.size.x / 2 and 
-        p.y >= self.position.y - self.size.y / 2 and 
-        p.y <= self.position.y + self.size.y / 2
+    return p.x >= self.position.x - self.size.x / 2 * self.tolerance and 
+        p.x <= self.position.x + self.size.x / 2 * self.tolerance and 
+        p.y >= self.position.y - self.size.y / 2 * self.tolerance and 
+        p.y <= self.position.y + self.size.y / 2 * self.tolerance
 end
 
 function Button:draw()

@@ -1,4 +1,4 @@
-DEBUG = true
+DEBUG = false
 FADE_TIME = 0.5
 
 tween = require 'tween'
@@ -73,6 +73,8 @@ function love.load()
     images.minimapFrame = love.graphics.newImage("graphics/minimap-frame.png")
     images.arrow = love.graphics.newImage("graphics/arrow.png")
     images.button = love.graphics.newImage("graphics/button.png")
+    images.tornado = love.graphics.newImage("graphics/tornado.png")
+    images.target = love.graphics.newImage("graphics/target.png")
 
 
     sounds = {}
@@ -91,10 +93,10 @@ function love.load()
 
 
     fonts = {}
-    fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30)
-    fonts.writing30 = love.graphics.newFont("TMJ.ttf", 30)
-    fonts.writing50 = love.graphics.newFont("TMJ.ttf", 50)
-    fonts.title = love.graphics.newFont("TMJ.ttf", 80)
+    fonts.normal = love.graphics.newFont("Thin Skinned.ttf", 30+15*(PIXELSCALE - 1))
+    fonts.writing30 = love.graphics.newFont("TMJ.ttf", 30+15*(PIXELSCALE - 1))
+    fonts.writing50 = love.graphics.newFont("TMJ.ttf", 50+25*(PIXELSCALE - 1))
+    fonts.title = love.graphics.newFont("TMJ.ttf", 80+40*(PIXELSCALE - 1))
     
     states = {}
     states.game = GameState:new()

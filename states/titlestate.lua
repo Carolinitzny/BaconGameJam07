@@ -17,12 +17,12 @@ function TitleState:initialize()
 
     if MOBILE then
         self.playButton = Button("Play", Vector:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2), Vector:new(306, 80))
-        self.playButton.font = fonts.writing50
+        self.playButton.font = fonts.writing30
         self.playButton.onTouchReleased = function() self:finish() end
         self:add(self.playButton, true)
 
         self.muteButton = Button("Toggle sound", self.playButton.position + Vector:new(0, 100), Vector:new(306, 80))
-        self.muteButton.font = fonts.writing50
+        self.muteButton.font = fonts.writing30
         self.muteButton.onTouchReleased = toggleMute
         self:add(self.muteButton, true)
     end

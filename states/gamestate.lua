@@ -35,9 +35,10 @@ function GameState:reset()
     self:add(Minimap:new(), true)
 
     if MOBILE then
-        self.dropButton = Button("Drop Package", Vector:new(love.graphics.getWidth() / 2, love.graphics.getHeight() - 120), Vector:new(306, 80))
-        self.dropButton.font = fonts.writing50
+        self.dropButton = Button("Drop Package", Vector:new(love.graphics.getWidth() / 2, love.graphics.getHeight() - 120), Vector:new(306, 80) * 1.5)
+        self.dropButton.font = fonts.writing30
         self.dropButton.onTouchReleased = function() self.plane:dropPackage() end
+        self.dropButton.tolerance = 1.3
         self:add(self.dropButton, true)
     end
 end

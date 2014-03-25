@@ -7,7 +7,7 @@ function table.removeValue(t, value)
     end
 end
 
--- Converts HSL to RGB (input range: 0 - 1, output range: 0 - 255)
+-- Converts HSL to RGB (input range: 0 - 1, output range: 0 - 255)end
 function hsl2rgb(h, s, l)
     local r, g, b = nil, nil, nil
  
@@ -50,4 +50,28 @@ end
 
 function toggleMute()
     love.audio.setVolume(1 - love.audio.getVolume())
+end
+
+function math.clamp(value, a, b)
+    if b < a then a, b = b, a end
+    return math.min(b, math.max(a, value))
+end
+
+function getTouches()
+    local function _getTouches()
+        local touches = {}
+        for i=1,love.touch.getTouchCount() do
+            local id, x, y, p = love.touch.getTouch(i)
+            local touch = {}
+            touch.id = id
+            touch.x = x * love.graphics.getWidth()
+            touch.y = y * love.graphics.getHeight()
+            touch.p = p
+            table.insert(touches, touch)
+        end
+        return touches
+    end
+
+    local e, r = pcall(_getTouches)
+    return e and r or {}
 end

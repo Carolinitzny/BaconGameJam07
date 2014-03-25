@@ -7,9 +7,12 @@ function Tornado:initialize(x,y)
     self.position = Vector:new(x,y)
     self.tornado = {}
     self.direction = Vector:new(0, 0)
-    self.particles = TornadoSwirl:new(self.position)
     self.seed = math.random() * 1000
     self.sound = love.audio.newSource(sounds.tornado)
+
+    if not MOBILE then
+        self.particles = TornadoSwirl:new(self.position)
+    end
 end
 
 function Tornado:update(dt)
@@ -17,8 +20,10 @@ function Tornado:update(dt)
     self.direction.y = love.math.noise(10000 + time/10 + self.seed) * 2 - 1
     self.position = self.position + self.direction * dt * 100
 
-    self.particles.position = self.position
-    self.particles:update(dt)
+    if self.particles then
+        self.particles.position = self.position
+        self.particles:update(dt)
+    end
 
     local plane = self.state.plane
     local diff = plane.position - self.position
@@ -40,6 +45,10 @@ end
 
 function Tornado:draw()
     love.graphics.setColor(255, 255, 255)
-
-    self.particles:draw()
+    if self.particles then
+        self.particles:draw()
+    else
+        local img = images.tornado
+        love.graphics.draw(img, self.position.x, self.position.y, time * 5, 1, 1, img:getWidth() / 2, img:getHeight() / 2)
+    end
 end
