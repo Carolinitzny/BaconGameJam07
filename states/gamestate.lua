@@ -33,6 +33,13 @@ function GameState:reset()
 
     self:add(Indicators:new(), true)
     self:add(Minimap:new(), true)
+
+    if MOBILE then
+        self.dropButton = Button("Drop Package", Vector:new(love.graphics.getWidth() / 2, love.graphics.getHeight() - 120), Vector:new(306, 80))
+        self.dropButton.font = fonts.writing50
+        self.dropButton.onTouchReleased = function() self.plane:dropPackage() end
+        self:add(self.dropButton, true)
+    end
 end
 
 function GameState:getWindVector(dt)
@@ -154,11 +161,24 @@ function GameState:generateWorld(left, right, top, bottom)
     end
 end
 
-function GameState:keypressed(key)
-    if key == " " then
-        self.plane:dropPackage()
-    -- elseif key == "tab" then
-    --     self:fadeOver(states.title)
+function GameState:onEvent(type, data)
+    if type == "keypressed" then
+        if data.key == " " then
+            self.plane:dropPackage()
+            return true
+        elseif data.key == "tab" and DEBUG then
+            self:fadeOver(states.title)
+            return true
+        elseif data.key == "escape" then
+            self:fadeOver(states.title)
+            return true
+        end
+    elseif type == "mousepressed" or type == "" then
+        local p = Vector:new(data.x / love.graphics.getWidth(), data.y / love.graphics.getHeight())
+        if (p - Vector:new(0.5, 0.5)):len() < 0.1 then
+            self.plane:dropPackage()
+            return true
+        end
     end
 end
 
@@ -171,22 +191,16 @@ function GameState:addScore(s)
     end
 end
 
-function GameState:mousepressed(x, y, b) 
-    local p = Vector:new(x / love.graphics.getWidth(), y / love.graphics.getHeight())
-    if (p - Vector:new(0.5, 0.5)):len() < 0.1 then
-        self.plane:dropPackage()
-    end
-end
-
 function GameState:fadeOver(state)
-    tween(1, self, {fade=1}, "inOutQuad", function()
+    self.plane.sound:stop()
+    tween(FADE_TIME, self, {fade=1}, "inOutQuad", function()
         setState(state)
     end)
 end
 
 function GameState:onEnter()
     self.fade = 1
-    tween(1, self, {fade=0}, "inOutQuad")
+    tween(FADE_TIME, self, {fade=0}, "inOutQuad")
 end
 
 function GameState:onScreen(pos, size)

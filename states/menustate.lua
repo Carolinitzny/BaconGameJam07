@@ -22,7 +22,7 @@ function MenuState:draw()
     local text = "Kids will starve!"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 100)
 
-    local text = "Press space to try it again!"
+    local text = (MOBILE and "Touch" or "Press space") .. " to try it again!"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 180)
     
     love.graphics.setFont(fonts.writing30)
@@ -45,16 +45,21 @@ function MenuState:draw()
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
 
-function MenuState:keypressed(key)
-    if key == " " then 
-        tween(1, self, {fade=1}, "inOutQuad", function()
-            states.game:reset()
-            setState(states.game)
-        end)
+function MenuState:onEvent(type, data)
+    if (type == "keypressed" and (data.key == " " or data.key == "escape")) or type == "touchpressed" then
+        self:finish()
+        return true
     end
+end
+
+function MenuState:finish()
+    tween(FADE_TIME, self, {fade=1}, "inOutQuad", function()
+        states.game:reset()
+        setState(states.game)
+    end)
 end
 
 function MenuState:onEnter()
     self.fade = 1
-    tween(1, self, {fade=0}, "inOutQuad")
+    tween(FADE_TIME, self, {fade=0}, "inOutQuad")
 end

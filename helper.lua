@@ -48,3 +48,6 @@ function hsl2rgb(h, s, l)
     return r * 255, g * 255, b * 255
 end
 
+function toggleMute()
+    love.audio.setVolume(1 - love.audio.getVolume())
+end

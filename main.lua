@@ -1,3 +1,6 @@
+DEBUG = true
+FADE_TIME = 0.5
+
 tween = require 'tween'
 highscore = require 'sick'
 local class = require 'middleclass'
@@ -17,6 +20,7 @@ require "entities/clouds"
 require "entities/tornado"
 require "indicators"
 require "minimap"
+require "button"
 
 require "state"
 require "states/gamestate"
@@ -36,6 +40,12 @@ function love.load()
         PIXELSCALE = love.window.getPixelScale()
     else
         PIXELSCALE = 1
+    end
+
+    MOBILE = love.system.getOS() == "Android"
+
+    if DEBUG then
+        love.audio.setVolume(0)
     end
 
     images = {}
@@ -62,6 +72,7 @@ function love.load()
     images.windsock = love.graphics.newImage("graphics/windsock.png")
     images.minimapFrame = love.graphics.newImage("graphics/minimap-frame.png")
     images.arrow = love.graphics.newImage("graphics/arrow.png")
+    images.button = love.graphics.newImage("graphics/button.png")
 
 
     sounds = {}
@@ -108,28 +119,40 @@ function love.draw()
 end
 
 function love.keypressed(key)
+    if currentState:sendEvent("keypressed", {key=key}) then return end
+
     if key == "escape" then
         highscore.save()
         love.event.push("quit")
     elseif key == "m" then
-        love.audio.setVolume(1 - love.audio.getVolume())
-    else
-        currentState:keypressed(key)
+        toggleMute()
     end
+end
+
+function love.keyreleased(key)
+    currentState:sendEvent("keyreleased", {key=key})
 end
 
 function love.textinput(char)
-    currentState:textinput(char)
+    currentState:sendEvent("textinput", {char=char})
+end
+
+function love.mousereleased(x, y, b)
+    currentState:sendEvent("mousereleased", {x=x, y=y, b=b})
 end
 
 function love.mousepressed(x, y, b)
-    currentState:mousepressed(x, y, b)
+    currentState:sendEvent("mousepressed", {x=x, y=y, b=b})
 end
 
 function love.touchpressed(id, x, y, p)
-    x = x * love.graphics.getWidth()
-    y = y * love.graphics.getHeight()
-    if id ~= 0 then
-        currentState:mousepressed(x, y, "l")
-    end
+    currentState:sendEvent("touchpressed", {id=id, x=x*love.graphics.getWidth(), y=y*love.graphics.getHeight(), p=p})
+end
+
+function love.touchreleased(id, x, y, p)
+    currentState:sendEvent("touchreleased", {id=id, x=x*love.graphics.getWidth(), y=y*love.graphics.getHeight(), p=p})
+end
+
+function love.touchmoved(id, x, y, p)
+    currentState:sendEvent("touchmoved", {id=id, x=x*love.graphics.getWidth(), y=y*love.graphics.getHeight(), p=p})
 end

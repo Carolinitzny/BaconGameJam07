@@ -29,32 +29,39 @@ function GameOverState:draw()
     love.graphics.print(self.name, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(self.name) / 2, 300)
     love.graphics.setColor(255, 255, 255, self.fade * 255)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-    
 end
 
-function GameOverState:keypressed(key)
-    if key == "return" and self.name then
-        if self.highscore == false then
-            highscore.add(self.name, states.game.score)
-            self.highscore = not self.highscore
+function GameOverState:onEvent(type, data)
+    if type == "keypressed" then
+        if (data.key == "return" or data.key == "escape") and self.name then
+            self:finish()
+            return true
+        elseif data.key == "backspace" then
+            self.name = string.sub(self.name, 1, string.len(self.name)-1)
+            return true
         end
-        tween(1, self, {fade=1}, "inOutQuad", function()
+    elseif type == "textinput" then
+        self.name = string.upper(self.name .. data.char)
+        return true
+    end
+end
+
+function GameOverState:finish()
+    love.keyboard.setTextInput(false)
+    if not self.highscore then
+        highscore.add(self.name, states.game.score)
+        self.highscore = true
+        tween(FADE_TIME, self, {fade=1}, "inOutQuad", function()
             setState(states.menu)
         end)
     end
-    if key == "backspace" then
-        self.name = string.sub(self.name, 1, string.len(self.name)-1)
-    end
-end
-
-function GameOverState:textinput(char)
-    self.name = string.upper(self.name .. char)
 end
 
 function GameOverState:onEnter()
     self.highscore = false
     self.fade = 1
-    tween(1, self, {fade=0}, "inOutQuad")
+    tween(FADE_TIME, self, {fade=0}, "inOutQuad")
     self.music = love.audio.newSource("sound/theme.ogg", "stream")
     self.music:play()
+    love.keyboard.setTextInput(true)
 end

@@ -65,7 +65,16 @@ function State:drawUI()
     end
 end
 
-function State:keypressed(key) end
-function State:textinput(char) end
-function State:mousepressed(x, y, b) end
+function State:onEvent(type, data) return false end
 function State:onEnter() end
+
+function State:sendEvent(type, data)
+    if self:onEvent(type, data) then return true end
+    for k,v in pairs(self.ui) do
+        if v:onEvent(type, data) then return true end
+    end
+    for k,v in pairs(self.world) do
+        if v:onEvent(type, data) then return true end
+    end
+    return false
+end

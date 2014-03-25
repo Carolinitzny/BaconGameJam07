@@ -14,6 +14,18 @@ function TitleState:initialize()
 
     self.musicCountdown = 0
     self.musicVolume = 1
+
+    if MOBILE then
+        self.playButton = Button("Play", Vector:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2), Vector:new(306, 80))
+        self.playButton.font = fonts.writing50
+        self.playButton.onTouchReleased = function() self:finish() end
+        self:add(self.playButton, true)
+
+        self.muteButton = Button("Toggle sound", self.playButton.position + Vector:new(0, 100), Vector:new(306, 80))
+        self.muteButton.font = fonts.writing50
+        self.muteButton.onTouchReleased = toggleMute
+        self:add(self.muteButton, true)
+    end
 end
 
 function TitleState:update(dt)
@@ -49,10 +61,12 @@ function TitleState:draw()
     love.graphics.setFont(fonts.title)
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 100)
 
-    love.graphics.setColor(0, 0, 0, 100 + 50 * math.abs(math.sin(time * 5)))
-    text = "Press space to start (M for mute)"
-    love.graphics.setFont(fonts.writing30)
-    love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 200)
+    if not MOBILE then
+        love.graphics.setColor(0, 0, 0, 100 + 50 * math.abs(math.sin(time * 5)))
+        text = "Press space to start (M for mute)"
+        love.graphics.setFont(fonts.writing30)
+        love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 200)
+    end
 
     love.graphics.setColor(0, 0, 0, 50)
     text = "Created by Carolinitzny, julia.hertel, opatut and trojan4"
@@ -66,15 +80,28 @@ function TitleState:draw()
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
 
-function TitleState:keypressed(key)
-    if key == " " then
-        tween(1, self, {musicVolume=0}, nil, function()
-            self.music:stop()
-        end)
+function TitleState:onEvent(type, data)
+    if (type == "keypressed" and data.key == " ") then
+        self:finish()
+        return true
+    elseif (type == "keypressed" and data.key == "escape") then
         tween(1, self, {fade=1}, "inOutQuad", function()
-            self.plane.sound:stop()
-            states.game:reset()
-            setState(states.game)
+            highscore.save()
+            love.event.push("quit")
         end)
+        return true
     end
+end
+
+function TitleState:finish()
+    tween(FADE_TIME, self, {fade=1, musicVolume=0}, "inOutQuad", function()
+        self.music:stop()
+        self.plane.sound:stop()
+        states.game:reset()
+        setState(states.game)
+    end)
+end
+
+function TitleState:onEnter()
+    tween(FADE_TIME, self, {fade=0, musicVolume=1}, "inOutQuad")
 end
