@@ -78,7 +78,7 @@ function love.load()
 
 
     sounds = {}
-    sounds.landing = love.sound.newSoundData("sound/landing.ogg")   
+    sounds.landing = love.sound.newSoundData("sound/landing.ogg")
     sounds.liftoff = love.sound.newSoundData("sound/liftoff.ogg")
     sounds.kill = love.sound.newSoundData("sound/death.ogg")
     sounds.crashing = love.sound.newSoundData("sound/crash.ogg")
@@ -97,15 +97,15 @@ function love.load()
     fonts.writing30 = love.graphics.newFont("TMJ.ttf", 30+15*(PIXELSCALE - 1))
     fonts.writing50 = love.graphics.newFont("TMJ.ttf", 50+25*(PIXELSCALE - 1))
     fonts.title = love.graphics.newFont("TMJ.ttf", 80+40*(PIXELSCALE - 1))
-    
+
     states = {}
     states.game = GameState:new()
     states.menu = MenuState:new()
     states.gameover = GameOverState:new()
     states.title = TitleState:new()
-    
+
     currentState = states.title
-    
+
     highscore.set("highscore", 3, "nobody", 0)
 end
 

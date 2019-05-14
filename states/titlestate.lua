@@ -81,7 +81,7 @@ function TitleState:draw()
 end
 
 function TitleState:onEvent(type, data)
-    if (type == "keypressed" and data.key == " ") then
+    if (type == "keypressed" and data.key == "space") then
         self:finish()
         return true
     elseif (type == "keypressed" and data.key == "escape") then

@@ -23,7 +23,7 @@ function GameState:reset()
     self.windDirection = 0
     self.windSwing = 0
     GameOverState.highscore = false
-    
+
     self:add(Ground:new())
     self:add(Clouds:new())
 
@@ -55,7 +55,7 @@ function GameState:update(dt)
     self.windFactor = f * (math.log(time * 0.05 + 1))
     self.windSwing = self.windSwing + f * dt
 
-    self.offset = self.plane.position - Vector:new(love.graphics.getWidth(), love.graphics.getHeight())*0.5    
+    self.offset = self.plane.position - Vector:new(love.graphics.getWidth(), love.graphics.getHeight())*0.5
 
     -- Generating villages
     local distance = 2000
@@ -66,22 +66,22 @@ function GameState:update(dt)
     if self.plane.position.x < g.left + distance then
         self:generateWorld(g.left - size, g.left, g.top, g.bottom)
         g.left = g.left - size
-    end    
-    --right 
+    end
+    --right
     if self.plane.position.x > g.right - distance then
         self:generateWorld(g.right, g.right + size, g.top, g.bottom)
         g.right = g.right + size
-    end    
+    end
     --top
     if self.plane.position.y < g.top + distance then
         self:generateWorld(g.left , g.right, g.top - size, g.top)
         g.top = g.top - size
     end
-    --bottom    
+    --bottom
     if self.plane.position.y > g.bottom - distance then
         self:generateWorld(g.left, g.right, g.bottom, g.bottom + size)
         g.bottom = g.bottom + size
-    end    
+    end
 end
 
 function GameState:draw()
@@ -103,18 +103,18 @@ function GameState:isVillageNearby(pos, threshold)
             if diff:len() < threshold then
                 return true
             end
-        end    
-    end    
+        end
+    end
     return false
 end
 
 function GameState:generateWorld(left, right, top, bottom)
     local area = math.abs((right - left)* (bottom - top))
-    
+
     --villages
     local density = 1.2/(800*600)
     local count = area * density
-    
+
     for k = 1, count do
         for l = 1, 50 do
             local pos = Vector:new(math.random(left,right), math.random(top, bottom))
@@ -124,9 +124,9 @@ function GameState:generateWorld(left, right, top, bottom)
                 local target = Target:new(pos.x, pos.y, village)
                 self:add(village)
                 self:add(target)
-                break    
-            end 
-        end    
+                break
+            end
+        end
     end
 
     --airports
@@ -138,9 +138,9 @@ function GameState:generateWorld(left, right, top, bottom)
             if not self:isVillageNearby(pos, 200) or l == 50 then
                 local airport = Airport:new(pos.x, pos.y, math.random()*2*math.pi)
                 self:add(airport)
-                break    
-            end 
-        end    
+                break
+            end
+        end
     end
 
     --vegetation
@@ -151,7 +151,7 @@ function GameState:generateWorld(left, right, top, bottom)
         local vegetation = Vegetation:new(pos.x, pos.y, vegetation)
         self:add(vegetation)
     end
-    
+
     --tornado
     local density = 0.2/(800*600)
     local count = area*density
@@ -164,7 +164,7 @@ end
 
 function GameState:onEvent(type, data)
     if type == "keypressed" then
-        if data.key == " " then
+        if data.key == "space" then
             self.plane:dropPackage()
             return true
         elseif data.key == "tab" and DEBUG then

@@ -16,7 +16,7 @@ end
 
 function h.load()
 	local file = love.filesystem.newFile(h.filename)
-	if not love.filesystem.exists(h.filename) or not file:open("r") then return end
+	if not love.filesystem.getInfo(h.filename) or not file:open("r") then return end
 	h.scores = {}
 	for line in file:lines() do
 		local i = line:find('\t', 1, true)

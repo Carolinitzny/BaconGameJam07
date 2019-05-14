@@ -25,7 +25,7 @@ end
 Explosion = class("Explosion", ParticleEntity)
 Explosion.z = 100
 function Explosion:initialize(position)
-    ParticleEntity.initialize(self, position, images.smoke, 100, "additive")
+    ParticleEntity.initialize(self, position, images.smoke, 100, "add")
     self.particles:setSpread(math.pi * 2)
     self.particles:setBufferSize( 1000 )
     self.particles:setEmissionRate( 4000 )
@@ -109,8 +109,8 @@ function TornadoSwirl:initialize(position)
     local a = 250
     local b = a * 0.6
     local c = a * 0.3
-    self.particles:setColors( 
-        c, 0.9*c, 0.8*c, 0, 
+    self.particles:setColors(
+        c, 0.9*c, 0.8*c, 0,
         b, 0.9*b, 0.8*b, 20,
         a, 0.9*a, 0.8*a, 50,
         a, 0.9*a, 0.8*a, 0)

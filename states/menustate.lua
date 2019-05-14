@@ -24,7 +24,7 @@ function MenuState:draw()
 
     local text = (MOBILE and "Touch" or "Press space") .. " to try it again!"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 180)
-    
+
     love.graphics.setFont(fonts.writing30)
     local text = "Highscores"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, love.graphics.getHeight() - 200)
@@ -46,7 +46,7 @@ function MenuState:draw()
 end
 
 function MenuState:onEvent(type, data)
-    if (type == "keypressed" and (data.key == " " or data.key == "escape")) or type == "touchpressed" then
+    if (type == "keypressed" and (data.key == "space" or data.key == "escape")) or type == "touchpressed" then
         self:finish()
         return true
     end

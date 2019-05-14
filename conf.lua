@@ -1,6 +1,6 @@
 function love.conf(t)
     t.identity = "the-hunger-planes"
-    t.version = "0.9.0"
+    t.version = "11.2"
     t.console = false
     t.window.title = "The Hunger Planes"
     t.window.width = 1000
@@ -9,7 +9,7 @@ function love.conf(t)
     t.window.minwidth = 600              -- Minimum window width if the window is resizable (number)
     t.window.minheight = 400             -- Minimum window height if the window is resizable (number)
     t.window.fullscreen = false        -- Enable fullscreen (boolean)
-    t.window.fullscreentype = "normal" -- Standard fullscreen or desktop fullscreen mode (string)
+    -- t.window.fullscreentype = "normal" -- Standard fullscreen or desktop fullscreen mode (string)
     t.window.vsync = true              -- Enable vertical sync (boolean)
     t.window.fsaa = 4                  -- The number of samples to use with multi-sampled antialiasing (number)
     t.window.display = 1               -- Index of the monitor to show the window in (number)
