@@ -52,7 +52,7 @@ function TitleState:update(dt)
 end
 
 function TitleState:draw()
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(1, 1, 1)
     self:drawWorld()
     self:drawUI()
 
@@ -62,13 +62,13 @@ function TitleState:draw()
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 100)
 
     if not MOBILE then
-        love.graphics.setColor(0, 0, 0, 100 + 50 * math.abs(math.sin(time * 5)))
+        love.graphics.setColor(0, 0, 0, 0.4 + 0.2 * math.abs(math.sin(time * 5)))
         text = "Press space to start (M for mute)"
         love.graphics.setFont(fonts.writing30)
         love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, 200)
     end
 
-    love.graphics.setColor(0, 0, 0, 50)
+    love.graphics.setColor(0, 0, 0, 0.2)
     text = "Created by Carolinitzny, julia.hertel, opatut and trojan4"
     love.graphics.setFont(fonts.writing30)
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, love.graphics.getHeight() - 100)
@@ -76,7 +76,7 @@ function TitleState:draw()
     text = "for BaconGameJam 07 -- Theme: hungry"
     love.graphics.print(text, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(text) / 2, love.graphics.getHeight() - 60)
 
-    love.graphics.setColor(255, 255, 255, 255 * self.fade)
+    love.graphics.setColor(1, 1, 1, self.fade)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
 

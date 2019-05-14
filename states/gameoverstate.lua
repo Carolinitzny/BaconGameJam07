@@ -14,7 +14,7 @@ function GameOverState:update(dt)
 end
 
 function GameOverState:draw()
-    love.graphics.setBackgroundColor(255, 255, 255)
+    love.graphics.setBackgroundColor(1, 1, 1)
 
     self:drawWorld()
     self:drawUI()
@@ -27,7 +27,7 @@ function GameOverState:draw()
 
 
     love.graphics.print(self.name, love.graphics.getWidth() / 2 - love.graphics.getFont():getWidth(self.name) / 2, 300)
-    love.graphics.setColor(255, 255, 255, self.fade * 255)
+    love.graphics.setColor(1, 1, 1, self.fade)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
 

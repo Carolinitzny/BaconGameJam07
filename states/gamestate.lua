@@ -85,14 +85,14 @@ function GameState:update(dt)
 end
 
 function GameState:draw()
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(1, 1, 1)
     love.graphics.push()
     love.graphics.translate(-self.offset.x, -self.offset.y)
     self:drawWorld()
     love.graphics.pop()
     self:drawUI()
 
-    love.graphics.setColor(255, 255, 255, self.fade * 255)
+    love.graphics.setColor(1, 1, 1, self.fade)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
 

@@ -39,10 +39,10 @@ function Plane:initialize(x, y, dummy)
     self.spinAngleSpeed = 0
 
     -- particles
-    self.smokeTrailLeft = SmokeTrail:new(self.position, self, 255, 255, 255)
-    self.smokeTrailRight = SmokeTrail:new(self.position, self, 255, 255, 255)
-    self.smokeTrailLeft2 = SmokeTrail:new(self.position, self, 50, 50, 50)
-    self.smokeTrailRight2 = SmokeTrail:new(self.position, self, 50, 50, 50)
+    self.smokeTrailLeft = SmokeTrail:new(self.position, self, 1, 1, 1)
+    self.smokeTrailRight = SmokeTrail:new(self.position, self, 1, 1, 1)
+    self.smokeTrailLeft2 = SmokeTrail:new(self.position, self, 0.2, 0.2, 0.2)
+    self.smokeTrailRight2 = SmokeTrail:new(self.position, self, 0.2, 0.2, 0.2)
     self.smokeTrailLeft2.particles:pause()
     self.smokeTrailRight2.particles:pause()
 
@@ -56,12 +56,12 @@ function Plane:initialize(x, y, dummy)
             self:liftoff()
         end)
     end
-end 
+end
 
 function Plane:update(dt)
     if not self.dummy then
         -- Motor problems
-        if math.random() < 1/30*dt and not self.motorProblem then 
+        if math.random() < 1/30*dt and not self.motorProblem then
             self.motorProblem = true
             tween(math.random()*2,{},{},nil,function()
                 self.motorProblem = false
@@ -71,15 +71,15 @@ function Plane:update(dt)
         if self.stutter then
             self.sound:pause()
             self.smokeTrailLeft2.particles:start()
-            self.smokeTrailRight2.particles:start() 
+            self.smokeTrailRight2.particles:start()
         else
             if not self.landing and not self.isCrashing and not self.crashed then
                 self.sound:play()
-                self.smokeTrailLeft2.particles:pause()         
+                self.smokeTrailLeft2.particles:pause()
                 self.smokeTrailRight2.particles:pause()
             end
-              
-        end    
+
+        end
 
         -- Movement
         if not self.isCrashing then
@@ -87,7 +87,7 @@ function Plane:update(dt)
             local dirChangeSpeed = 5
 
             if love.keyboard.isDown("left") or love.keyboard.isDown("a") then dir = -1 end
-            if love.keyboard.isDown("right") or love.keyboard.isDown("d") then dir = 1 end  
+            if love.keyboard.isDown("right") or love.keyboard.isDown("d") then dir = 1 end
 
             for id, touch in pairs(getTouches()) do
                 if touch.x < 0.3*love.graphics.getWidth() then dir = dir - 1 end
@@ -121,7 +121,7 @@ function Plane:update(dt)
 
         local dir = Vector:new(0, -1)
         dir:rotate(self.direction)
-        dir = dir * dt * self.speed * SPEED_FACTOR 
+        dir = dir * dt * self.speed * SPEED_FACTOR
 
         -- wind
         if not (self.isCrashing or self.landing or self.crashed) then
@@ -139,7 +139,7 @@ function Plane:update(dt)
         self.direction = self.direction + self.directionChange * dt
         local dir = Vector:new(0, -1)
         dir:rotate(self.direction)
-        dir = dir * dt * self.speed * SPEED_FACTOR 
+        dir = dir * dt * self.speed * SPEED_FACTOR
         self.position = self.position + dir
     end
 
@@ -147,7 +147,7 @@ function Plane:update(dt)
     self.smokeTrailRight.position  = self.position + Vector:new( 35*self.size, 0):rotated(self.direction + self.spinAngle)
     self.smokeTrailLeft2.position  = self.position + Vector:new(-35*self.size, 0):rotated(self.direction + self.spinAngle)
     self.smokeTrailRight2.position = self.position + Vector:new( 35*self.size, 0):rotated(self.direction + self.spinAngle)
-    
+
     self.smokeTrailLeft:update(dt)
     self.smokeTrailRight:update(dt)
     self.smokeTrailLeft2:update(dt)
@@ -155,16 +155,16 @@ function Plane:update(dt)
 end
 
 function Plane:draw()
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(1, 1, 1)
     self.smokeTrailLeft:draw()
     self.smokeTrailRight:draw()
     self.smokeTrailLeft2:draw()
     self.smokeTrailRight2:draw()
     if not self.crashed then
-        love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction + self.spinAngle, 
+        love.graphics.draw(images.plane, self.position.x, self.position.y, self.direction + self.spinAngle,
         self.size, self.size, images.plane:getWidth()/2, images.plane:getHeight()/2)
     else
-        love.graphics.draw(images.crater, self.position.x, self.position.y, 0, 0.1, 0.1, images.crater:getWidth()/2, images.crater:getHeight()/2)        
+        love.graphics.draw(images.crater, self.position.x, self.position.y, 0, 0.1, 0.1, images.crater:getWidth()/2, images.crater:getHeight()/2)
     end
 end
 
@@ -185,7 +185,7 @@ function Plane:crash()
     source:play()
 
     tween(2.6, self, {altitude = 0}, "inQuad")
-    tween(2.6, self, {speed = 0}, "inCirc", function() 
+    tween(2.6, self, {speed = 0}, "inCirc", function()
         self.state:add(Explosion:new(self.position:clone()))
         self.crashed = true
         Plane.z = 3
@@ -233,11 +233,11 @@ function Plane:liftoff()
     source = love.audio.newSource(sounds.liftoff)
     source:play()
     self.fuelconsumption = 1
-    self.smokeTrailLeft2.particles:pause()         
+    self.smokeTrailLeft2.particles:pause()
     self.smokeTrailRight2.particles:pause()
     tween(1, self, {speed = 1, rotationspeed=2}, "inQuad")
-    tween(1, {}, {}, nil, function() 
-        tween(3, self, {altitude = 1}, "inOutQuad", function() 
+    tween(1, {}, {}, nil, function()
+        tween(3, self, {altitude = 1}, "inOutQuad", function()
             self.landing = false
             self.sound:play()
         end)

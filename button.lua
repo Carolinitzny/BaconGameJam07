@@ -6,7 +6,7 @@ function Button:initialize(text, pos, size)
     self.text = text
     self.font = fonts.normal
     self.textColor = {0, 0, 0}
-    self.backgroundColor = {255, 255, 255, 200}
+    self.backgroundColor = {1, 1, 1, 0.8}
     self.position = pos
     self.size = size or Vector(100, 30)
     self.z = 1000
@@ -20,16 +20,16 @@ function Button:initialize(text, pos, size)
 end
 
 function Button:isInside(p)
-    return p.x >= self.position.x - self.size.x / 2 * self.tolerance and 
-        p.x <= self.position.x + self.size.x / 2 * self.tolerance and 
-        p.y >= self.position.y - self.size.y / 2 * self.tolerance and 
+    return p.x >= self.position.x - self.size.x / 2 * self.tolerance and
+        p.x <= self.position.x + self.size.x / 2 * self.tolerance and
+        p.y >= self.position.y - self.size.y / 2 * self.tolerance and
         p.y <= self.position.y + self.size.y / 2 * self.tolerance
 end
 
 function Button:draw()
-    local c = self.touchedDown and {255, 255, 255, 255} or 
+    local c = self.touchedDown and {1, 1, 1, 1} or
         self.active and self.backgroundColor or
-        {120, 120, 120}
+        {0.5, 0.5, 0.5}
     love.graphics.setColor(unpack(c))
     -- love.graphics.rectangle("fill", self.position.x - self.size.x / 2, self.position.y - self.size.y / 2, self.size.x, self.size.y)
     local img = images.button
@@ -59,7 +59,7 @@ function Button:onEvent(type, data)
             return true
         end
     elseif type == "touchmoved" then
-        if data.id == self.touchedDownId then 
+        if data.id == self.touchedDownId then
             self.touchedDown = self:isInside(Vector:new(data.x, data.y))
             return true
         end

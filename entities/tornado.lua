@@ -44,7 +44,7 @@ function Tornado:update(dt)
 end
 
 function Tornado:draw()
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(1, 1, 1)
     if self.particles then
         self.particles:draw()
     else

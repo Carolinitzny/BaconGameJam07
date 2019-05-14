@@ -35,7 +35,7 @@ function Airport:update(dt)
             else
                 self.lockedTime = 1
 
-                self.state:add(Text(self.position, "Too fast!", {255, 0, 0}, love.graphics.newFont(30)))
+                self.state:add(Text(self.position, "Too fast!", {1, 0, 0}, love.graphics.newFont(30)))
             end
         end
     end
